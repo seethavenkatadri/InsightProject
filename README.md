@@ -17,9 +17,8 @@ The idea of this project is to build a representation of global events that are 
 For current events
 
 Amazon S3 -> Kafka -> Spark Streaming -> Cassandra -> Spark MLLib -> Mapbox 
-                                         (After classification)
-                                            |
-                                        Amazon S3 -> AWS Athena -> Mapbox 
+                                            
+                                         Amazon S3 -> AWS Athena -> Mapbox 
                                         (Classified Images - Historical data)
 ## Dataset
 Data to be pulled using Social Media APIs that are source of images with geolocation
