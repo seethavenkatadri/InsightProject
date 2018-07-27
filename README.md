@@ -21,8 +21,21 @@ Amazon S3 -> Kafka -> Spark Streaming -> Cassandra -> Spark MLLib -> Mapbox
                                          Amazon S3 -> AWS Athena -> Mapbox 
                                         (Classified Images - Historical data)
 ## Dataset
-Data to be pulled using Social Media APIs that are source of images with geolocation
+Images from Social Media APIs with geolocation
+
 ## Engineering challenges
 The challenge here will be to receive and prepare streaming images for the machine learning models to feed on, and also to deliver the results of the classification on scale
+
+## Current issues  
+
+- Processing images on a stream applying classification introduces a bottleneck based on algorithmic complexity - handling this is not be a data-engineering problem
+
+- Social media API call restrictions limit the amount of data that can be obtained
+
+## What to do further
+
+- Non-image source of events can be used for the classification algorithm
+
+- Other data sources can be joined with the event data 
 
 ## Trade-offs
