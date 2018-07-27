@@ -23,7 +23,7 @@ For getting historical data to recommend future events
 Amazon S3 -> Kafka -> Spark Streaming -> Amazon S3 -> AWS Athena -> Mapbox 
 
 ## Dataset
-Instagram and other social media APIs. The logistics of using the APIs should be worked out.
+Data to be pulled using Social Media APIs that are source of images with geolocation
 ## Engineering challenges
 The challenge here will be to receive and prepare streaming images for the machine learning models to feed on, and also to deliver the results of the classification on scale
 
