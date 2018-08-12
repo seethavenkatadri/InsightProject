@@ -5,15 +5,20 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-//import org.apache.kafka.streams.kstream.JoinWindows;
-//import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.JoinWindows;
+import org.apache.kafka.streams.kstream.Joined;
+import org.apache.kafka.streams.kstream.KStream;
 
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import org.apache.kafka.streams.kstream.Printed;
 
 public class StreamProcessor {
 
     public static void main(String[] args) throws Exception {
+        String flightTopic = "topic-flight";
+        String weatherTopic = "topic-weather";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-processor");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-34-210-24-198.us-west-2.compute.amazonaws.com:9092");
@@ -21,9 +26,21 @@ public class StreamProcessor {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
         final StreamsBuilder builder = new StreamsBuilder();
-       // final StreamsBuilderWeather weather_builder = new StreamsBuilder();
+        KStream<String, String> flightLines = builder.stream(flightTopic);
+        KStream<String, String> weatherLines = builder.stream(weatherTopic);
+        flightLines.print(Printed.toSysOut());
+        weatherLines.print(Printed.toSysOut());
 
-        builder.stream("topic-flight").to("topic-receive-flight");
+     /*   KStream<String, String> joined = flightLines.join(weatherLines,
+                (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner
+                JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                Joined.with(
+                        Serdes.String(), /* key
+                        Serdes.Long(),   /* left value
+                        Serdes.Double())  /* right value
+        );
+*/
+
 
         final Topology topology = builder.build();
 
