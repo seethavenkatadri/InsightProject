@@ -1,6 +1,6 @@
-# Project-Title
+# SafeJourney
 
-Flight status tracker
+Flight status tracker that can help track weather changes
 [Link](#) to your presentation.
 
 <hr/>
