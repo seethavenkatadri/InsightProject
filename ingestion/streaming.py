@@ -38,7 +38,7 @@ def publish_message(producerInstance, topic_name, value):
 def connect_kafka_producer():
     "Function to create a producer handle"
     _producer = None
-    conf = {'bootstrap.servers': 'ec2-54-203-179-203.us-west-2.compute.amazonaws.com:9092'}
+    conf = {'bootstrap.servers': 'localhost:9092'}
     try:
         _producer = confluent_kafka.Producer(conf)
     except Exception as ex:
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     weather_record=["ID","USAF","WBAN","Elevation","Country_Code","Latitude","Longitude","Date","Year","Month","Day","Mean_Temp","Mean_Temp_Count","Mean_Dewpoint",
                     "Mean_Dewpoint_Count","Mean_Sea_Level_Pressure","Mean_Sea_Level_Pressure_Count","Mean_Station_Pressure","Mean_Station_Pressure_Count",
                     "Mean_Visibility","Mean_Visibility_Count","Mean_Windspeed","Mean_Windspeed_Count","Max_Windspeed","Max_Gust","Max_Temp","Max_Temp_Quality_Flag",
-                    "Min_Temp","Min_Temp_Quality_Flag","Precipitation","Precip_Flag	Snow_Depth","Fog","Rain_or_Drizzle","Snow_or_Ice","Hail","Thunder","Tornado"]
+                    "Min_Temp","Min_Temp_Quality_Flag","Precipitation","Precip_Flag","Snow_Depth","Fog","Rain_or_Drizzle","Snow_or_Ice","Hail","Thunder","Tornado"]
 
     ############   Main Function   ###############
     bucketName = sys.arg[1]
@@ -71,7 +71,11 @@ if __name__ == '__main__':
 
     #for file in fileHandleList:
     for file in fileHandleList:
+        skip_header=0
         for record in codecs.getreader('utf-8')(file.get()[u'Body']):
+            if skip_header == 0 and topicName == 'topic-weather':
+                skip_header += 1
+                continue
             arr=record.strip().split(',')
             if topicName == 'topic-flight':
                 resultDict = dict({flight_record[i]:arr[i] for i in range(len(arr))})
