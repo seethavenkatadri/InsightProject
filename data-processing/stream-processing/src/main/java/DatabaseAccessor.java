@@ -3,10 +3,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import org.postgresql.*;
 
 public class DatabaseAccessor {
 
     public static void main(String[] args) {
+
+
         String url = "jdbc:postgresql://localhost/DB_MAIN_SCHEMA";
         String dbuser = "postgres";
         String dbpwd = "postgres";
@@ -14,6 +17,13 @@ public class DatabaseAccessor {
         PreparedStatement st = null;
         ResultSet rs = null;
         String stationid = "707099999";
+
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         try {
             conn = DriverManager.getConnection(url, dbuser,dbpwd);
