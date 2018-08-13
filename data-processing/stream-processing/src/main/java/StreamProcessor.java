@@ -21,7 +21,7 @@ public class StreamProcessor {
         String weatherTopic = "topic-weather";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-processor");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-54-203-179-203.us-west-2.compute.amazonaws.com:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
