@@ -27,8 +27,6 @@ while(True):
     csvwriter = csv.writer(state_data)
 
     count = 0
-    csvwriter.writerow('icao24,callsign,origin_country,time_position,last_contact,longitude,latitude,geo_altitude,on_ground,velocity,true_track,vertical_rate,sensors,baro_altitude,squawk,spi,position_source')
-
     for state in states_list:
          csvwriter.writerow(state)
     state_data.close()
