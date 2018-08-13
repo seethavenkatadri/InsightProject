@@ -27,13 +27,10 @@ while(True):
     csvwriter = csv.writer(state_data)
 
     count = 0
+    csvwriter.writerow('icao24,callsign,origin_country,time_position,last_contact,longitude,latitude,geo_altitude,on_ground,velocity,true_track,vertical_rate,sensors,baro_altitude,squawk,spi,position_source')
 
     for state in states_list:
-          if count == 0:
-                header = state
-                csvwriter.writerow(header)
-                count += 1
-          csvwriter.writerow(state)
+         csvwriter.writerow(state)
     state_data.close()
     s3.Bucket(myBucket).upload_file('/Users/seethadixit/'+filename, "latest_data/"+filename)
     os.remove('/Users/seethadixit/'+filename)
