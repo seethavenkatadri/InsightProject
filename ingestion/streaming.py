@@ -61,7 +61,7 @@ if __name__ == '__main__':
                     "Min_Temp","Min_Temp_Quality_Flag","Precipitation","Precip_Flag","Snow_Depth","Fog","Rain_or_Drizzle","Snow_or_Ice","Hail","Thunder","Tornado"]
 
     ############   Main Function   ###############
-    bucketName = sys.arg[1]
+    bucketName = sys.argv[1]
     topicName = sys.argv[2]
     myBucket=get_bucket_details(bucketName)
 
