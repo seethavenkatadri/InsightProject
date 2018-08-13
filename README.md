@@ -1,6 +1,6 @@
 # SafeJourney
 
-Flight status tracker that can help track weather changes
+Flight status tracker that can also track weather changes
 [Link](#) to your presentation.
 
 <hr/>
