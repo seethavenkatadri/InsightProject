@@ -41,7 +41,7 @@ public class DatabaseAccessor {
             rs = st.executeQuery();
             while (rs.next()) {
                 System.out.print("Column 1 returned ");
-                System.out.println(rs.getString(1));
+                System.out.println(rs.getString(4));
             }
         } catch (SQLException e) {
             System.err.println("Select failed: " + e.getMessage());
