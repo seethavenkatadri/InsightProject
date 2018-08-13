@@ -50,7 +50,6 @@ for record in all_stations:
         continue
     parsed=record.strip().split(',')
     sql = """INSERT INTO WEATHER_STATION(STATIONID,USAF,WBAN,NAME,COUNTRY,STATE,CALL,LOCATION,ELEVATION,BEGINDATE,ENDDATE)
-                 VALUES('""" + parsed[0] + parsed[1] + """','""" + parsed[0] + """','""" + parsed[1] + """','""" + \
-          parsed[2] + """','""" + parsed[3] + """','""" + parsed[4] + """','""" + parsed[5]  + """',POINT(""" + parsed[6] + """,""" + parsed[7] + """),'""" + parsed[8] + """','""" + parsed[9] + """','""" + parsed[10] + """');"""
+                 VALUES('""" + parsed[0] + parsed[1] + """','""" + parsed[0] + """','""" + parsed[1] + """',""" + \
+          """$$"""+parsed[2] + """$$,'""" + parsed[3] + """','""" + parsed[4] + """','""" + parsed[5]  + """',POINT(""" + parsed[6] + """,""" + parsed[7] + """),'""" + parsed[8] + """','""" + parsed[9] + """','""" + parsed[10] + """');"""
     insert_status(sql)
-    print()
