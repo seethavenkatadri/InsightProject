@@ -49,7 +49,7 @@ for record in all_stations:
         skip_header += 1
         continue
     parsed=record.strip().split(',')
-    sql = """INSERT INTO WEATHER_STATION(STATIONID,USAF,WBAN,NAME,COUNTRY,STATE,CALL,LOCATION,ELEVATION,BEGINDATE,ENDDATE)
+    sql = """INSERT INTO POSTGRES.WEATHER_STATION(STATIONID,USAF,WBAN,NAME,COUNTRY,STATE,CALL,LOCATION,ELEVATION,BEGINDATE,ENDDATE)
                  VALUES('""" + parsed[0] + parsed[1] + """','""" + parsed[0] + """','""" + parsed[1] + """',""" + \
           """$$"""+parsed[2] + """$$,'""" + parsed[3] + """','""" + parsed[4] + """','""" + parsed[5]  + """',ST_GeomFromText('POINT(""" + parsed[6] + """ """ + parsed[7] + """)', 4326),'""" + parsed[8] + """','""" + parsed[9] + """','""" + parsed[10] + """');"""
     insert_status(sql)
