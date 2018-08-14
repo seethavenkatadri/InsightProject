@@ -1,7 +1,7 @@
 import psycopg2
 from configparser import ConfigParser
 
-def config(filename='database.ini', section='postgresql'):
+def config(filename='/Users/seethadixit/Documents/Insight/Project/gitrepo/InsightProject/database-scripts/database.ini', section='postgresql'):
     # create a parser
     parser = ConfigParser()
     # read config file
@@ -51,5 +51,5 @@ for record in all_stations:
     parsed=record.strip().split(',')
     sql = """INSERT INTO WEATHER_STATION(STATIONID,USAF,WBAN,NAME,COUNTRY,STATE,CALL,LOCATION,ELEVATION,BEGINDATE,ENDDATE)
                  VALUES('""" + parsed[0] + parsed[1] + """','""" + parsed[0] + """','""" + parsed[1] + """',""" + \
-          """$$"""+parsed[2] + """$$,'""" + parsed[3] + """','""" + parsed[4] + """','""" + parsed[5]  + """',POINT(""" + parsed[6] + """,""" + parsed[7] + """),'""" + parsed[8] + """','""" + parsed[9] + """','""" + parsed[10] + """');"""
+          """$$"""+parsed[2] + """$$,'""" + parsed[3] + """','""" + parsed[4] + """','""" + parsed[5]  + """',ST_GeomFromText('POINT(""" + parsed[6] + """ """ + parsed[7] + """)', 4326),'""" + parsed[8] + """','""" + parsed[9] + """','""" + parsed[10] + """');"""
     insert_status(sql)
