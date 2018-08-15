@@ -30,7 +30,7 @@ public class DatabaseAccessor {
             st.setDouble(1, latitude);
             st.setDouble(2, longitude);
         } catch (SQLException e) {
-            System.err.println("Connection initialization failed, aborting.");
+            System.err.println("Select failed.");
             e.printStackTrace();
             System.exit(1);
             // signal the compiler that code flow ends here:
@@ -47,7 +47,7 @@ public class DatabaseAccessor {
                 System.out.print("Nearest station: "+stationId);
             }
         } catch (SQLException e) {
-            System.err.println("Select failed: " + e.getMessage());
+            System.err.println("Iteration failed: " + e.getMessage());
             System.exit(1);
             // Signal the compiler that code flow ends here.
             return "error";
