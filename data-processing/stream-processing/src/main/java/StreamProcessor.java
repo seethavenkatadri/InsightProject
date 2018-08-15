@@ -20,9 +20,13 @@ public class StreamProcessor {
     public static void main(String[] args) throws Exception {
         String flightTopic = "topic-flight";
         String weatherTopic = "topic-weather";
+        String targetTopic = "topic-flying-conditions";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-processor");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-54-190-255-92.us-west-2.compute.amazonaws.com:9092,ec2-52-11-1-142.us-west-2.compute.amazonaws.com:9092,ec2-34-218-87-143.us-west-2.compute.amazonaws.com:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-35-160-138-85.us-west-2.compute.amazonaws.com:9092," +
+                                                            "ec2-34-218-19-12.us-west-2.compute.amazonaws.com:9092," +
+                                                            "ec2-54-148-69-162.us-west-2.compute.amazonaws.com:9092," +
+                                                            "ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         Double latitude = -77.0092;
