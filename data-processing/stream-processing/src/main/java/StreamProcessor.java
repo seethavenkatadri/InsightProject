@@ -41,6 +41,8 @@ public class StreamProcessor {
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
+
+
     /*   KStream<String, String> joined = flightLines.join(weatherLines,
                 (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue,
                 JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),

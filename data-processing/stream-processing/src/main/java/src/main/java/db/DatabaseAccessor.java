@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 public class DatabaseAccessor {
 
     public static String  getNearestStation(Double latitude, Double longitude) {
-        String url = "jdbc:postgresql://ec2-54-203-148-178.us-west-2.compute.amazonaws.com:5432/postgres";
+        String url = "jdbc:postgresql://ec2-54-203-148-178.us-west-2.compute.amazonaws.com/postgres";
         String dbuser = "postgres";
         String dbpwd = "postgres";
         Connection conn = null;
