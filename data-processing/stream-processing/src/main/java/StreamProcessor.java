@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
+import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
 
@@ -21,9 +22,14 @@ public class StreamProcessor {
         String weatherTopic = "topic-weather";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-processor");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-54-203-179-203.us-west-2.compute.amazonaws.com:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-54-190-255-92.us-west-2.compute.amazonaws.com:9092,ec2-52-11-1-142.us-west-2.compute.amazonaws.com:9092,ec2-34-218-87-143.us-west-2.compute.amazonaws.com:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        Double latitude = -77.0092;
+        Double longitude = 38.889588;
+        String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);
+
+        System.out.println("nearest id :" + nearestStationId);
 
         final StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> flightLines = builder.stream(flightTopic);
@@ -31,8 +37,8 @@ public class StreamProcessor {
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
-     /*   KStream<String, String> joined = flightLines.join(weatherLines,
-                (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner
+    /*   KStream<String, String> joined = flightLines.join(weatherLines,
+                (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue,
                 JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
                 Joined.with(
                         Serdes.String(), /* key

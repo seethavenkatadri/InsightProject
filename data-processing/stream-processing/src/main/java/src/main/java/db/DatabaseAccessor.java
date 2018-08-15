@@ -1,22 +1,21 @@
+package src.main.java.db;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import org.postgresql.*;
 
 public class DatabaseAccessor {
 
-    public static void main(String[] args) {
-
-
-        String url = "jdbc:postgresql://localhost/DB_MAIN_SCHEMA";
+    public static String  getNearestStation(Double latitude, Double longitude) {
+        String url = "jdbc:postgresql://ec2-54-203-148-178.us-west-2.compute.amazonaws.com:5432/postgres";
         String dbuser = "postgres";
         String dbpwd = "postgres";
         Connection conn = null;
         PreparedStatement st = null;
         ResultSet rs = null;
-        String stationid = "707099999";
+        String stationId = null;
 
         try
         {
@@ -27,8 +26,9 @@ public class DatabaseAccessor {
 
         try {
             conn = DriverManager.getConnection(url, dbuser,dbpwd);
-            st = conn.prepareStatement("SELECT * FROM weather_station WHERE stationid = ?");
-            st.setString(1, stationid);
+            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT(? ?)') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
+            st.setDouble(1, latitude);
+            st.setDouble(2, longitude);
         } catch (SQLException e) {
             System.err.println("Connection initialization failed, aborting.");
             e.printStackTrace();
@@ -41,13 +41,14 @@ public class DatabaseAccessor {
             rs = st.executeQuery();
             while (rs.next()) {
                 System.out.print("Column 1 returned ");
-                System.out.println(rs.getString(4));
+                stationId = rs.getString(1);
+                System.out.print("Nearest station: "+stationId);
             }
         } catch (SQLException e) {
             System.err.println("Select failed: " + e.getMessage());
             System.exit(1);
             // Signal the compiler that code flow ends here.
-            return;
+            return "error";
         }
         try {
         rs.close();
@@ -57,7 +58,9 @@ public class DatabaseAccessor {
         System.err.println("Close failed: " + e.getMessage());
         System.exit(1);
         // Signal the compiler that code flow ends here.
-        return;
+        return "error";
         }
+        return stationId;
     }
+
 }
