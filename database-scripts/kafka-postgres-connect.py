@@ -20,15 +20,15 @@ def config(filename='database.ini', section='postgresql'):
     return db
 
 def get_new_messages(topic):
-    consumer = KafkaConsumer(bootstrap_servers='ec2-54-214-182-146.us-west-2.compute.amazonaws.com:9092')
+    consumer = KafkaConsumer(bootstrap_servers='ec2-35-155-248-194.us-west-2.compute.amazonaws.com:9092,ec2-52-33-147-84.us-west-2.compute.amazonaws.com:9092,ec2-34-210-66-48.us-west-2.compute.amazonaws.com,ec2-54-200-46-124.us-west-2.compute.amazonaws.com')
     consumer.subscribe(['topic-receive-flight'])
 
     return consumer
 
 def insert_status(record):
     """ insert a new record into the flying conditions table """
-    sql = """INSERT INTO test_table(name)
-             VALUES(%s) RETURNING id;"""
+    sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO)
+             VALUES(%s,%s);"""
     conn = None
     state_id = None
     try:
@@ -39,9 +39,7 @@ def insert_status(record):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (record,))
-        # get the generated id back
-        state_id = cur.fetchone()[0]
+        cur.execute(sql, (record['flight-id'],record['geoinfo'],))
         # commit the changes to the database
         conn.commit()
         # close communication with the database
@@ -52,7 +50,6 @@ def insert_status(record):
         if conn is not None:
             conn.close()
 
-    return state_id
 
 all_messages = get_new_messages('topic-receive-flight')
 for record in all_messages:
