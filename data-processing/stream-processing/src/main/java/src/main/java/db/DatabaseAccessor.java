@@ -39,6 +39,8 @@ public class DatabaseAccessor {
 
         try {
             rs = st.executeQuery();
+            stationId = rs.getString(1);
+            System.out.print("Nearest station: "+stationId);
             while (rs.next()) {
                 System.out.print("Column 1 returned ");
                 stationId = rs.getString(1);
