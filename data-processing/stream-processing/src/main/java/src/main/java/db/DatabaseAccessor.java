@@ -27,16 +27,8 @@ public class DatabaseAccessor {
         return jsonObject;
     }
 
-    public static String  getNearestStationString(String jsonAsString) {
-        JSONObject jsonObject = null;
-        String stationId = null;
-        jsonObject=convertStringToJson(jsonAsString);
-        stationId = getNearestStation((Double)jsonObject.get("Latitude"),(Double) jsonObject.get("Longitude"));
-        return stationId;
 
-    }
-
-    public static String  getNearestStation(Double latitude, Double longitude) {
+    public static String  getNearestStation(String jsonAsString) {
         String url = "jdbc:postgresql://localhost/postgres";
         String dbuser = "postgres";
         String dbpwd = "postgres";
@@ -44,6 +36,8 @@ public class DatabaseAccessor {
         PreparedStatement st = null;
         ResultSet rs = null;
         String stationId = null;
+        JSONObject jsonObject = null;
+        jsonObject=convertStringToJson(jsonAsString);
 
         try
         {
@@ -54,7 +48,7 @@ public class DatabaseAccessor {
 
         try {
             conn = DriverManager.getConnection(url, dbuser,dbpwd);
-            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+ latitude +" "+longitude+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
+            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+ jsonObject.get("Latitude") +" "+jsonObject.get("Latitude")+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
         } catch (SQLException e) {
             System.err.println("Select failed.");
             e.printStackTrace();

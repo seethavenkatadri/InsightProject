@@ -51,7 +51,7 @@ public class StreamProcessor {
         weatherLines.print(Printed.toSysOut());
 
 
-        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStationString(value), value));
+        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
 
