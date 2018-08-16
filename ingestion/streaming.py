@@ -4,6 +4,7 @@ import csv
 import codecs
 import json
 import sys
+from datetime import datetime
 
 def get_file_handle(my_bucket, filename):
     # getting each file handle
@@ -23,6 +24,15 @@ def get_all_bucket_files(my_bucket):
     for object in my_bucket.objects.filter(Prefix='sample_data/'):
         fileHandleList.append(get_file_handle(my_bucket, object.key))
     return fileHandleList
+
+def assign_defaults(dict):
+    "Function to set default inputs for latitude and longitude"
+    if dict["Latitude"] == "":
+        dict["Latitude"] = '0.0'
+    if dict["Longitude"] == "":
+        dict["Longitude"] = '0.0'
+    return dict
+
 
 def publish_message(producerInstance, topic_name, key, value):
     "Function to send messages to the specific topic"
@@ -52,13 +62,14 @@ if __name__ == '__main__':
     ##Limited number of records as of now
     num_records=0
     num_files=0
-    flight_record=["icao24", "callsign", "origin_country", "time_position", "last_contact", "longitude", "latitude", "geo_altitude",
+    flight_record=["icao24", "callsign", "origin_country", "time_position", "last_contact", "Longitude", "Latitude", "geo_altitude",
      "on_ground", "velocity", "true_track", "vertical_rate", "sensors", "baro_altitude", "squawk", "spi",
-     "position_source"]
+     "position_source","inputTime"]
     weather_record=["ID","USAF","WBAN","Elevation","Country_Code","Latitude","Longitude","Date","Year","Month","Day","Mean_Temp","Mean_Temp_Count","Mean_Dewpoint",
                     "Mean_Dewpoint_Count","Mean_Sea_Level_Pressure","Mean_Sea_Level_Pressure_Count","Mean_Station_Pressure","Mean_Station_Pressure_Count",
                     "Mean_Visibility","Mean_Visibility_Count","Mean_Windspeed","Mean_Windspeed_Count","Max_Windspeed","Max_Gust","Max_Temp","Max_Temp_Quality_Flag",
-                    "Min_Temp","Min_Temp_Quality_Flag","Precipitation","Precip_Flag","Snow_Depth","Fog","Rain_or_Drizzle","Snow_or_Ice","Hail","Thunder","Tornado"]
+                    "Min_Temp","Min_Temp_Quality_Flag","Precipitation","Precip_Flag","Snow_Depth","Fog","Rain_or_Drizzle","Snow_or_Ice","Hail","Thunder","Tornado",
+                    "inputTime"]
 
     ############   Main Function   ###############
     bucketName = sys.argv[1]
@@ -78,12 +89,14 @@ if __name__ == '__main__':
                 continue
             arr=record.strip().split(',')
             if topicName == 'topic-flight':
-                resultDict = dict({flight_record[i]:arr[i] for i in range(len(arr))})
+                resultDict = dict({flight_record[i]:arr[i] for i in range(len(arr) - 1)})
             else:
-                resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr))})
-            print(resultDict)
+                resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
+            resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            finalDict = assign_defaults(resultDict)
+            print(finalDict)
             #### because both the arrays have their first element as keys icao24 and ID
-            publish_message(kafkaProducer, topicName,arr[0], json.dumps(resultDict))
+            publish_message(kafkaProducer, topicName,arr[0], json.dumps(finalDict))
 
 
             num_records+=1
