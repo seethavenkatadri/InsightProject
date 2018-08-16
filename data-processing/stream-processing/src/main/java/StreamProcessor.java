@@ -89,7 +89,7 @@ public class StreamProcessor {
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
-
+/*
         KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
@@ -107,7 +107,7 @@ public class StreamProcessor {
 
         flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
-
+*/
 
         final Topology topology = builder.build();
 
