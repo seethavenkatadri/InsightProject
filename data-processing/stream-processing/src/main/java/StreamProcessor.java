@@ -93,7 +93,7 @@ public class StreamProcessor {
         KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
-/*
+
         KStream<String, FlightsWithFlyingConditions> flightsWithFlyingConditions = flightsWithNearestStationId.leftJoin(weatherTable,
                  new ValueJoiner<String, String, FlightsWithFlyingConditions>() {
                     @Override
@@ -102,8 +102,10 @@ public class StreamProcessor {
                     }
                 }
         );
+        flightsWithFlyingConditions.print(Printed.toSysOut());
 
-        KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
+
+  /*      KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
 
         flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
