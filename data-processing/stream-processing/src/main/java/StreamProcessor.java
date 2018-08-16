@@ -98,11 +98,12 @@ public class StreamProcessor {
                  new ValueJoiner<String, String, FlightsWithFlyingConditions>() {
                     @Override
                     public FlightsWithFlyingConditions apply(String leftValue, String rightValue) {
+                        System.out.println("Inside value joiner");
                         return new FlightsWithFlyingConditions(leftValue,rightValue);
                     }
                 }
         );
-        flightsWithFlyingConditions.print(Printed.toSysOut());
+     /*   flightsWithFlyingConditions.print(Printed.toSysOut());
 
 
   /*      KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
