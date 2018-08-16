@@ -11,6 +11,31 @@ import org.json.simple.parser.ParseException;
 
 public class DatabaseAccessor {
 
+    public static JSONObject convertStringToJson(String jsonAsString){
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = (JSONObject) parser.parse(jsonAsString);
+        } catch (ParseException e)
+        {
+            System.err.println("JSON parse failed: " + e.getMessage());
+            System.exit(1);
+            // Signal the compiler that code flow ends here.
+            return null;
+        }
+        return jsonObject;
+    }
+
+    public static String  getNearestStation(String jsonAsString) {
+        JSONObject jsonObject = null;
+        String stationId = null;
+        jsonObject=convertStringToJson(jsonAsString);
+        stationId = getNearestStation((Double)jsonObject.get("Latitude"),(Double) jsonObject.get("Longitude"));
+        return stationId;
+
+    }
+
     public static String  getNearestStation(Double latitude, Double longitude) {
         String url = "jdbc:postgresql://localhost/postgres";
         String dbuser = "postgres";
