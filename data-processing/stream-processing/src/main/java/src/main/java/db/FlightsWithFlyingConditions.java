@@ -90,6 +90,7 @@ public class FlightsWithFlyingConditions {
         this.Min_Temp = (Double) weatherObject.get("Min_Temp");
         this.Precipitation = (String) weatherObject.get("Precipitation");
         this.inputTime = (String) flightObject.get("inputTime");
+        System.out.println("Inside constructor");
         this.FlyingConditionsIndex = getFlyingConditions(this.Mean_Visibility,this.Mean_Windspeed);
     }
 
