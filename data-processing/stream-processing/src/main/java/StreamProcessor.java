@@ -11,16 +11,12 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.KeyValue;
 
 
-import java.util.Dictionary;
 import java.util.Properties;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
-import org.json.simple.parser.ParseException;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
