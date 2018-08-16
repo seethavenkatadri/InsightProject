@@ -14,6 +14,11 @@ import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.KeyValue;
 import src.main.java.db.FlightsWithFlyingConditions;
+import java.io.IOException;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+
 
 
 import java.util.Properties;
@@ -25,6 +30,24 @@ import org.json.simple.JSONObject;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
+
+
+
+
+        public static String convertObjectToJSON(FlightsWithFlyingConditions flyingConditions){
+
+            ObjectMapper mapperObj = new ObjectMapper();
+            String jsonStr = null;
+
+            try {
+                jsonStr = mapperObj.writeValueAsString(flyingConditions);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+            return jsonStr;
+        }
+
 
     public static void main(String[] args)  {
         String flightTopic = "topic-flight";
@@ -55,7 +78,7 @@ public class StreamProcessor {
         KGroupedStream<String, String> weatherGroupedWithStationId = weatherLines.groupByKey();
 
         KTable<String, String> weatherTable = weatherGroupedWithStationId.reduce(
-                new Reducer<String>() { /* adder */
+                new Reducer<String>() {
                     @Override
                     public String apply(String aggValue, String newValue) {
                         return newValue;
@@ -70,8 +93,6 @@ public class StreamProcessor {
         KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
-       // KGroupedStream<String, String> flightsGroupedWithStationId = flightsWithNearestStationId.groupByKey();
-
 
         KStream<String, FlightsWithFlyingConditions> flightsWithFlyingConditions = flightsWithNearestStationId.leftJoin(weatherTable,
                  new ValueJoiner<String, String, FlightsWithFlyingConditions>() {
@@ -81,6 +102,10 @@ public class StreamProcessor {
                     }
                 }
         );
+
+        KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
+
+        flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
 
 
