@@ -23,22 +23,6 @@ import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
 
-    public static JSONObject convertStringToJson(String jsonAsString){
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = null;
-
-        try {
-            jsonObject = (JSONObject) parser.parse(jsonAsString);
-        } catch (ParseException e)
-        {
-            System.err.println("JSON parse failed: " + e.getMessage());
-            System.exit(1);
-            // Signal the compiler that code flow ends here.
-            return null;
-        }
-        return jsonObject;
-    }
-
     public static void main(String[] args) throws Exception {
         String flightTopic = "topic-flight";
         String weatherTopic = "topic-weather";
@@ -62,28 +46,9 @@ public class StreamProcessor {
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
-        System.out.println("Initial");
 
-        KStream<String, JSONObject> flightLinesWithJson = flightLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
-        KStream<String, JSONObject> weatherLinesWithJson = weatherLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
-
-        flightLinesWithJson.print(Printed.toSysOut());
-        weatherLinesWithJson.print(Printed.toSysOut());
-
-        System.out.println("Json");
-
-     /*   KStream<String, JSONObject> filteredFlightLines = flightLinesWithJson.filter((key, value) ->  (String) value.get("latitude") != "");
-        KStream<String, JSONObject> filteredWeatherLines = weatherLinesWithJson.filter((key, value) -> (String) value.get("Latitude") != "");
-
-        filteredFlightLines.print(Printed.toSysOut());
-        filteredWeatherLines.print(Printed.toSysOut());
-
-        System.out.println("Filtered");*/
-
-
-
-            KStream<String, JSONObject> flightsWithNearestStationId = flightLinesWithJson.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation((Double) value.get("latitude"),(Double) value.get("longitude")), value));
-            flightsWithNearestStationId.print(Printed.toSysOut());
+        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
+        flightsWithNearestStationId.print(Printed.toSysOut());
 
 
 
