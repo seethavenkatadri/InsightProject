@@ -74,6 +74,7 @@ public class FlightsWithFlyingConditions {
     }
 
     public FlightsWithFlyingConditions(String flight, String weather) {
+        System.out.println("Inside constructor");
         JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
         JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
         this.icao24 = (String) flightObject.get("icao24");
@@ -90,7 +91,7 @@ public class FlightsWithFlyingConditions {
         this.Min_Temp = (Double) weatherObject.get("Min_Temp");
         this.Precipitation = (String) weatherObject.get("Precipitation");
         this.inputTime = (String) flightObject.get("inputTime");
-        System.out.println("Inside constructor");
+
         this.FlyingConditionsIndex = getFlyingConditions(this.Mean_Visibility,this.Mean_Windspeed);
     }
 
