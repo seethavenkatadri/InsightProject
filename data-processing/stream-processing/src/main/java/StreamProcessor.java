@@ -8,7 +8,12 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Reducer;
+import org.apache.kafka.streams.kstream.ValueJoiner;
+import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.KeyValue;
+import src.main.java.db.FlightsWithFlyingConditions;
 
 
 import java.util.Properties;
@@ -16,6 +21,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
+import org.json.simple.JSONObject;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
@@ -46,6 +52,16 @@ public class StreamProcessor {
         KStream<String, String> flightLines = builder.stream(flightTopic);
         KStream<String, String> weatherLines = builder.stream(weatherTopic);
 
+        KGroupedStream<String, String> weatherGroupedWithStationId = weatherLines.groupByKey();
+
+        KTable<String, String> weatherTable = weatherGroupedWithStationId.reduce(
+                new Reducer<String>() { /* adder */
+                    @Override
+                    public String apply(String aggValue, String newValue) {
+                        return newValue;
+                    }
+                });
+
 
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
@@ -54,21 +70,18 @@ public class StreamProcessor {
         KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
+       // KGroupedStream<String, String> flightsGroupedWithStationId = flightsWithNearestStationId.groupByKey();
 
 
-
-
-
-
-    /*   KStream<String, String> joined = flightLines.join(weatherLines,
-                (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue,
-                JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-                Joined.with(
-                        Serdes.String(), /* key
-                        Serdes.Long(),   /* left value
-                        Serdes.Double())  /* right value
+        KStream<String, FlightsWithFlyingConditions> flightsWithFlyingConditions = flightsWithNearestStationId.leftJoin(weatherTable,
+                 new ValueJoiner<String, String, FlightsWithFlyingConditions>() {
+                    @Override
+                    public FlightsWithFlyingConditions apply(String leftValue, String rightValue) {
+                        return new FlightsWithFlyingConditions(leftValue,rightValue);
+                    }
+                }
         );
-*/
+
 
 
         final Topology topology = builder.build();
