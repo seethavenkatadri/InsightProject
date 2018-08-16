@@ -8,9 +8,12 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.KeyValue;
+
 
 import java.util.Dictionary;
 import java.util.Properties;
+import org.json.JSONObject;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
@@ -37,13 +40,15 @@ public class StreamProcessor {
         System.out.println("nearest id :" + nearestStationId);
 
         final StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Dictionary> flightLines = builder.stream(flightTopic);
-        KStream<String, Dictionary> weatherLines = builder.stream(weatherTopic);
+        KStream<String, JSONObject> flightLines = builder.stream(flightTopic);
+        KStream<String, JSONObject> weatherLines = builder.stream(weatherTopic);
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
-     /*   KStream<String, String> flightsWithNearestStationId = flightLines.mapValues(key -> DatabaseAccessor.getNearestStation(value));
+        KStream<String, JSONObject> flightsWithNearestStationId = flightLines.map((key,value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value.getDouble("latitude"),value.getDouble("longitude")),value));
         flightsWithNearestStationId.print(Printed.toSysOut());
+
+
 
 
 

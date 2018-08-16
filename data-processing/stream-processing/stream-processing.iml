@@ -35,5 +35,6 @@
     <orderEntry type="library" name="Maven: org.rocksdb:rocksdbjni:5.7.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-simple:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20180130" level="project" />
   </component>
 </module>
