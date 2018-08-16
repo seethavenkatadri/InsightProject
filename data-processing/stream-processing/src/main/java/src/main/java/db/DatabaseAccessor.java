@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class DatabaseAccessor {
 
-    public static String  getNearestStation(Double latitude, Double longitude) {
+    public static String  getNearestStation(String jsonAsString) {
         String url = "jdbc:postgresql://localhost/postgres";
         String dbuser = "postgres";
         String dbpwd = "postgres";
@@ -16,6 +19,19 @@ public class DatabaseAccessor {
         PreparedStatement st = null;
         ResultSet rs = null;
         String stationId = null;
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = (JSONObject) parser.parse(jsonAsString);
+        } catch (ParseException e)
+        {
+            System.err.println("JSON parse failed: " + e.getMessage());
+            System.exit(1);
+            // Signal the compiler that code flow ends here.
+            return "error";
+        }
+
 
         try
         {
@@ -26,7 +42,7 @@ public class DatabaseAccessor {
 
         try {
             conn = DriverManager.getConnection(url, dbuser,dbpwd);
-            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+latitude+" "+longitude+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
+            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+jsonObject.getDouble("latitude")+" "+jsonObject.getDouble("longitude")+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
          //   st.setDouble(1, latitude);
          //   st.setDouble(2, longitude);
         } catch (SQLException e) {

@@ -13,10 +13,14 @@ import org.apache.kafka.streams.KeyValue;
 
 import java.util.Dictionary;
 import java.util.Properties;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
+import org.json.simple.parser.ParseException;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
@@ -33,20 +37,22 @@ public class StreamProcessor {
                                                             "ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        Double latitude = -77.0092;
+      /*  Double latitude = -77.0092;
         Double longitude = 38.889588;
-        String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);
+        String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);*/
 
-        System.out.println("nearest id :" + nearestStationId);
-
+        JSONParser parser = new JSONParser();
         final StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, JSONObject> flightLines = builder.stream(flightTopic);
-        KStream<String, JSONObject> weatherLines = builder.stream(weatherTopic);
+        KStream<String, String> flightLines = builder.stream(flightTopic);
+        KStream<String, String> weatherLines = builder.stream(weatherTopic);
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
-        KStream<String, JSONObject> flightsWithNearestStationId = flightLines.map((key,value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value.getDouble("latitude"),value.getDouble("longitude")),value));
-        flightsWithNearestStationId.print(Printed.toSysOut());
+
+
+            KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
+            flightsWithNearestStationId.print(Printed.toSysOut());
+
 
 
 
