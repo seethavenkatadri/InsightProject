@@ -46,7 +46,7 @@ public class DatabaseAccessor {
 
         try {
             conn = DriverManager.getConnection(url, dbuser,dbpwd);
-            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+ jsonObject.get("latitude") +" "+jsonObject.get("longitude")+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
+            st = conn.prepareStatement("SELECT stationid FROM (SELECT stationid, distance FROM (SELECT stationid,ST_Distance(point1, point2) distance FROM (SELECT stationid,geolocation point1, ST_GeogFromText('SRID=4326;POINT("+ jsonObject.get("Latitude") +" "+jsonObject.get("Longitude")+")') point2 FROM weather_station) a) b ORDER BY distance DESC) c limit 1;");
         } catch (SQLException e) {
             System.err.println("Select failed.");
             e.printStackTrace();
