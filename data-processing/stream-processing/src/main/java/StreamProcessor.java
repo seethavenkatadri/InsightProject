@@ -13,17 +13,14 @@ import org.apache.kafka.streams.KeyValue;
 
 import java.util.Properties;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
-import org.json.simple.parser.ParseException;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         String flightTopic = "topic-flight";
         String weatherTopic = "topic-weather";
         String targetTopic = "topic-flying-conditions";
@@ -47,8 +44,8 @@ public class StreamProcessor {
         weatherLines.print(Printed.toSysOut());
 
 
-        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
-        flightsWithNearestStationId.print(Printed.toSysOut());
+       // KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
+       // flightsWithNearestStationId.print(Printed.toSysOut());
 
 
 
