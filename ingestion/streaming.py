@@ -24,12 +24,13 @@ def get_all_bucket_files(my_bucket):
         fileHandleList.append(get_file_handle(my_bucket, object.key))
     return fileHandleList
 
-def publish_message(producerInstance, topic_name, value):
+def publish_message(producerInstance, topic_name, key, value):
     "Function to send messages to the specific topic"
     try:
-        producerInstance.produce(topic_name,value)
-        producerInstance.flush()
-        print('Message published successfully.')
+        if topic_name == 'topic-flight':
+            producerInstance.produce(topic_name,key=key,value=value)
+            producerInstance.flush()
+            print('Message published successfully.')
     except Exception as ex:
         print('Exception in publishing message')
         print(str(ex))
@@ -38,7 +39,7 @@ def publish_message(producerInstance, topic_name, value):
 def connect_kafka_producer():
     "Function to create a producer handle"
     _producer = None
-    conf = {'bootstrap.servers': 'localhost:9092'}
+    conf = {'bootstrap.servers': 'ec2-35-160-138-85.us-west-2.compute.amazonaws.com:9092,ec2-34-218-19-12.us-west-2.compute.amazonaws.com:9092,ec2-54-148-69-162.us-west-2.compute.amazonaws.com:9092,ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092'}
     try:
         _producer = confluent_kafka.Producer(conf)
     except Exception as ex:
@@ -82,8 +83,10 @@ if __name__ == '__main__':
             else:
                 resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr))})
             print(resultDict)
+            #### because both the arrays have their first element as keys icao24 and ID
+            publish_message(kafkaProducer, topicName,arr[0], json.dumps(resultDict))
 
-            publish_message(kafkaProducer, topicName, json.dumps(resultDict))
+
             num_records+=1
             if num_records == 10:
                 break
