@@ -58,14 +58,27 @@ public class StreamProcessor {
         KStream<String, String> flightLines = builder.stream(flightTopic);
         KStream<String, String> weatherLines = builder.stream(weatherTopic);
 
+
+        flightLines.print(Printed.toSysOut());
+        weatherLines.print(Printed.toSysOut());
+
+        System.out.println("Initial");
+
         KStream<String, JSONObject> flightLinesWithJson = flightLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
         KStream<String, JSONObject> weatherLinesWithJson = weatherLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
+
+        flightLinesWithJson.print(Printed.toSysOut());
+        weatherLinesWithJson.print(Printed.toSysOut());
+
+        System.out.println("Json");
 
         KStream<String, JSONObject> filteredFlightLines = flightLinesWithJson.filter((key, value) ->  (String) value.get("latitude") != "");
         KStream<String, JSONObject> filteredWeatherLines = weatherLinesWithJson.filter((key, value) -> (String) value.get("Latitude") != "");
 
         filteredFlightLines.print(Printed.toSysOut());
         filteredWeatherLines.print(Printed.toSysOut());
+
+        System.out.println("Filtered");
 
 
 
