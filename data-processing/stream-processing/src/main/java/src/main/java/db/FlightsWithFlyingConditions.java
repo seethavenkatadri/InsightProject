@@ -9,13 +9,13 @@ public class FlightsWithFlyingConditions {
     private String origin_country;
     private String time_position;
     private String last_contact;
-    private Double Longitude;
-    private Double Latitude;
+    private String Longitude;
+    private String Latitude;
     private String geo_altitude;
     private Boolean on_ground;
-    private Double velocity;
+    private String velocity;
     private String true_track;
-    private Double vertical_rate;
+    private String vertical_rate;
     private String sensors;
     private String baro_altitude;
     private String squawk;
@@ -81,11 +81,10 @@ public class FlightsWithFlyingConditions {
         if (flight != null) {
             JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
             this.icao24 = (String) flightObject.get("icao24");
-            this.Latitude = (Double) flightObject.get("Latitude");
-            this.Longitude = (Double) flightObject.get("Latitude");
-            this.Longitude = (Double) flightObject.get("Latitude");
+            this.Latitude = (String) flightObject.get("Latitude");
+            this.Longitude = (String) flightObject.get("Longitude");
             this.origin_country = (String) flightObject.get("origin_country");
-            this.velocity = (Double) flightObject.get("velocity");
+            this.velocity = (String) flightObject.get("velocity");
             this.true_track = (String) flightObject.get("true_track");
             this.inputTime = (String) flightObject.get("inputTime");
         }
