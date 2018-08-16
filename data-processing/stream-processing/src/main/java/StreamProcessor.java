@@ -33,6 +33,13 @@ public class StreamProcessor {
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
+        Double latitude = -77.0092;
+        Double longitude = 38.889588;
+
+
+        String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);
+        System.out.println("nearest id :" + nearestStationId);
+
 
 
         final StreamsBuilder builder = new StreamsBuilder();
