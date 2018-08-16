@@ -103,14 +103,14 @@ public class StreamProcessor {
                     }
                 }
         );
-     /*   flightsWithFlyingConditions.print(Printed.toSysOut());
+        flightsWithFlyingConditions.print(Printed.toSysOut());
 
 
-  /*      KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
+        KStream<String, String> flightsWithFlyingConditionsJSON = flightsWithFlyingConditions.mapValues(value -> convertObjectToJSON(value));
 
         flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
-*/
+
 
         final Topology topology = builder.build();
 
