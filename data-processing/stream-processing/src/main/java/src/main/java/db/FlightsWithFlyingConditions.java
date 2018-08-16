@@ -75,24 +75,33 @@ public class FlightsWithFlyingConditions {
 
     public FlightsWithFlyingConditions(String flight, String weather) {
         System.out.println("Inside constructor");
-        JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
-        JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
-        this.icao24 = (String) flightObject.get("icao24");
-        this.Latitude = (Double) flightObject.get("Latitude");
-        this.Longitude = (Double) flightObject.get("Latitude");
-        this.Longitude = (Double) flightObject.get("Latitude");
-        this.origin_country = (String) flightObject.get("origin_country");
-        this.velocity = (Double) flightObject.get("velocity");
-        this.true_track = (String) flightObject.get("true_track");
-        this.stationId = (String) weatherObject.get("ID");
-        this.Mean_Visibility = (Double) weatherObject.get("Mean_Visibility");
-        this.Mean_Windspeed = (Double) weatherObject.get("Mean_Windspeed");
-        this.Max_Temp = (Double) weatherObject.get("Max_Temp");
-        this.Min_Temp = (Double) weatherObject.get("Min_Temp");
-        this.Precipitation = (String) weatherObject.get("Precipitation");
-        this.inputTime = (String) flightObject.get("inputTime");
 
-        this.FlyingConditionsIndex = getFlyingConditions(this.Mean_Visibility,this.Mean_Windspeed);
+
+
+        if (flight != null) {
+            JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
+            this.icao24 = (String) flightObject.get("icao24");
+            this.Latitude = (Double) flightObject.get("Latitude");
+            this.Longitude = (Double) flightObject.get("Latitude");
+            this.Longitude = (Double) flightObject.get("Latitude");
+            this.origin_country = (String) flightObject.get("origin_country");
+            this.velocity = (Double) flightObject.get("velocity");
+            this.true_track = (String) flightObject.get("true_track");
+            this.inputTime = (String) flightObject.get("inputTime");
+        }
+        if (weather != null) {
+            JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
+            this.stationId = (String) weatherObject.get("ID");
+            this.Mean_Visibility = (Double) weatherObject.get("Mean_Visibility");
+            this.Mean_Windspeed = (Double) weatherObject.get("Mean_Windspeed");
+            this.Max_Temp = (Double) weatherObject.get("Max_Temp");
+            this.Min_Temp = (Double) weatherObject.get("Min_Temp");
+            this.Precipitation = (String) weatherObject.get("Precipitation");
+            this.FlyingConditionsIndex = getFlyingConditions(this.Mean_Visibility,this.Mean_Windspeed);
+        }
+
+
+
     }
 
 }
