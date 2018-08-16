@@ -37,6 +37,8 @@ public class DatabaseAccessor {
         ResultSet rs = null;
         String stationId = null;
         JSONObject jsonObject = null;
+
+        System.out.println("string : " + jsonAsString);
         jsonObject=convertStringToJson(jsonAsString);
 
         try
