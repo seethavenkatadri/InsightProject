@@ -5,27 +5,80 @@ import src.main.java.db.DatabaseAccessor;
 public class FlightsWithFlyingConditions {
 
     private String icao24;
-    private String callsign;
-    private String origin_country;
+    private String origin;
+    private String longitude;
+    private String latitude;
+    private String velocity;
+    private String track;
+    private String inputTime;
+
+    private String stationId;
+    private Double visibility;
+    private Double windspeed;
+    private Double maxTemp;
+    private Double minTemp;
+    private String precipitation;
+
+    private Double flyingConditionsIndex;
+
+    public String getIcao24() {
+        return this.icao24;
+    }
+
+    public String getOrigin() {
+        return this.origin;
+    }
+    public String getLatitude() {
+        return this.latitude;
+    }
+    public String getLongitude() {
+        return this.longitude;
+    }
+    public String getVelocity() {
+        return this.velocity;
+    }
+    public String getTrack() {
+        return this.track;
+    }
+    public String getInputTime() {
+        return this.inputTime;
+    }
+
+    public String getStationId() {
+        return this.stationId;
+    }
+    public Double getVisibility() {
+        return this.visibility;
+    }
+    public Double getWindspeed() {
+        return this.windspeed;
+    }
+    public Double getMaxTemp() {
+        return this.maxTemp;
+    }
+    public Double getMinTemp() {
+        return this.minTemp;
+    }
+    public String getPrecipitation() {
+        return this.precipitation;
+    }
+    public Double getFlyingConditionsIndex() {
+        return this.flyingConditionsIndex;
+    }
+
+/*  private String callsign;
     private String time_position;
     private String last_contact;
-    private String Longitude;
-    private String Latitude;
     private String geo_altitude;
     private Boolean on_ground;
-    private String velocity;
-    private String true_track;
     private String vertical_rate;
     private String sensors;
     private String baro_altitude;
     private String squawk;
     private String spi;
-    private String position_source;
-    private String inputTime;
+    private String position_source;*/
 
-
-    private String stationId;
-    private String usaf;
+   /* private String usaf;
     private String wban;
     private String Elevation;
     private String Country_Code;
@@ -43,17 +96,12 @@ public class FlightsWithFlyingConditions {
     private Integer Mean_Sea_Level_Pressure_Count;
     private String Mean_Station_Pressure;
     private Integer Mean_Station_Pressure_Count;
-    private Double Mean_Visibility;
     private Integer Mean_Visibility_Count;
-    private Double Mean_Windspeed;
     private Integer Mean_Windspeed_Count;
     private String Max_Windspeed;
     private String Max_Gust;
-    private Double Max_Temp;
     private String Max_Temp_Quality_Flag;
-    private Double Min_Temp;
     private String Min_Temp_Quality_Flag;
-    private String Precipitation;
     private String Precip_Flag;
     private String Snow_Depth;
     private String Fog;
@@ -62,9 +110,9 @@ public class FlightsWithFlyingConditions {
     private Boolean Hail;
     private Boolean Thunder;
     private Boolean Tornado;
-    private String WInputTime;
+    private String WInputTime;*/
 
-    private Double FlyingConditionsIndex;
+
 
     private Double getFlyingConditions(Double visibility,Double windSpeed){
         Double flyingConditions = 0.0;
@@ -81,22 +129,22 @@ public class FlightsWithFlyingConditions {
         if (flight != null) {
             JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
             this.icao24 = (String) flightObject.get("icao24");
-            this.Latitude = (String) flightObject.get("Latitude");
-            this.Longitude = (String) flightObject.get("Longitude");
-            this.origin_country = (String) flightObject.get("origin_country");
+            this.latitude = (String) flightObject.get("Latitude");
+            this.longitude = (String) flightObject.get("Longitude");
+            this.origin = (String) flightObject.get("origin_country");
             this.velocity = (String) flightObject.get("velocity");
-            this.true_track = (String) flightObject.get("true_track");
+            this.track = (String) flightObject.get("true_track");
             this.inputTime = (String) flightObject.get("inputTime");
         }
         if (weather != null) {
             JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
             this.stationId = (String) weatherObject.get("ID");
-            this.Mean_Visibility = (Double) weatherObject.get("Mean_Visibility");
-            this.Mean_Windspeed = (Double) weatherObject.get("Mean_Windspeed");
-            this.Max_Temp = (Double) weatherObject.get("Max_Temp");
-            this.Min_Temp = (Double) weatherObject.get("Min_Temp");
-            this.Precipitation = (String) weatherObject.get("Precipitation");
-            this.FlyingConditionsIndex = getFlyingConditions(this.Mean_Visibility,this.Mean_Windspeed);
+            this.visibility = (Double) weatherObject.get("Mean_Visibility");
+            this.windspeed = (Double) weatherObject.get("Mean_Windspeed");
+            this.maxTemp = (Double) weatherObject.get("Max_Temp");
+            this.minTemp = (Double) weatherObject.get("Min_Temp");
+            this.precipitation = (String) weatherObject.get("Precipitation");
+            this.flyingConditionsIndex = getFlyingConditions(this.visibility,this.windspeed);
         }
 
 

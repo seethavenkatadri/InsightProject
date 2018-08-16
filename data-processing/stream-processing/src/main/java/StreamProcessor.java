@@ -110,6 +110,8 @@ public class StreamProcessor {
 
         flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
+        flightsWithFlyingConditionsJSON.to("topic-receive-flight");
+
 
 
         final Topology topology = builder.build();
