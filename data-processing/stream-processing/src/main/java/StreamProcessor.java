@@ -9,6 +9,7 @@ import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
 
+import java.util.Dictionary;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -36,10 +37,14 @@ public class StreamProcessor {
         System.out.println("nearest id :" + nearestStationId);
 
         final StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, String> flightLines = builder.stream(flightTopic);
-        KStream<String, String> weatherLines = builder.stream(weatherTopic);
+        KStream<String, Dictionary> flightLines = builder.stream(flightTopic);
+        KStream<String, Dictionary> weatherLines = builder.stream(weatherTopic);
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
+
+     /*   KStream<String, String> flightsWithNearestStationId = flightLines.mapValues(key -> DatabaseAccessor.getNearestStation(value));
+        flightsWithNearestStationId.print(Printed.toSysOut());
+
 
 
 
