@@ -33,12 +33,12 @@ public class StreamProcessor {
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
-        Double latitude = -77.0092;
+       /* Double latitude = -77.0092;
         Double longitude = 38.889588;
 
 
         String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);
-        System.out.println("nearest id :" + nearestStationId);
+        System.out.println("nearest id :" + nearestStationId);*/
 
 
 
@@ -51,7 +51,7 @@ public class StreamProcessor {
         weatherLines.print(Printed.toSysOut());
 
 
-        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
+        KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStationString(value), value));
         flightsWithNearestStationId.print(Printed.toSysOut());
 
 

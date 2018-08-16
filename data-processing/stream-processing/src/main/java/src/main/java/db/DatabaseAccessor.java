@@ -27,7 +27,7 @@ public class DatabaseAccessor {
         return jsonObject;
     }
 
-    public static String  getNearestStation(String jsonAsString) {
+    public static String  getNearestStationString(String jsonAsString) {
         JSONObject jsonObject = null;
         String stationId = null;
         jsonObject=convertStringToJson(jsonAsString);
