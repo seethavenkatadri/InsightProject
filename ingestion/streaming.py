@@ -27,10 +27,9 @@ def get_all_bucket_files(my_bucket):
 def publish_message(producerInstance, topic_name, key, value):
     "Function to send messages to the specific topic"
     try:
-        if topic_name == 'topic-flight':
-            producerInstance.produce(topic_name,key=key,value=value)
-            producerInstance.flush()
-            print('Message published successfully.')
+        producerInstance.produce(topic_name,key=key,value=value)
+        producerInstance.flush()
+        print('Message published successfully.')
     except Exception as ex:
         print('Exception in publishing message')
         print(str(ex))
