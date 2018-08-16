@@ -13,13 +13,31 @@ import org.apache.kafka.streams.KeyValue;
 
 import java.util.Properties;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.streams.kstream.Printed;
+import org.json.simple.parser.ParseException;
 import src.main.java.db.DatabaseAccessor;
 
 public class StreamProcessor {
+
+    public static JSONObject convertStringToJson(String jsonAsString){
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = (JSONObject) parser.parse(jsonAsString);
+        } catch (ParseException e)
+        {
+            System.err.println("JSON parse failed: " + e.getMessage());
+            System.exit(1);
+            // Signal the compiler that code flow ends here.
+            return null;
+        }
+        return jsonObject;
+    }
 
     public static void main(String[] args) throws Exception {
         String flightTopic = "topic-flight";
@@ -33,20 +51,25 @@ public class StreamProcessor {
                                                             "ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-      /*  Double latitude = -77.0092;
-        Double longitude = 38.889588;
-        String nearestStationId = DatabaseAccessor.getNearestStation(latitude, longitude);*/
 
-        JSONParser parser = new JSONParser();
+
+
         final StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> flightLines = builder.stream(flightTopic);
         KStream<String, String> weatherLines = builder.stream(weatherTopic);
+
+        KStream<String, JSONObject> flightLinesWithJson = flightLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
+        KStream<String, JSONObject> weatherLinesWithJson = flightLines.map((key, value) -> KeyValue.pair(key, convertStringToJson(value)));
+
+        KStream<String, JSONObject> filteredFlightLines = flightLinesWithJson.filter((key, value) ->  (Double) value.get("latitude") > 0.0);
+        KStream<String, JSONObject> filteredWeatherLines = weatherLinesWithJson.filter((key, value) -> (Double) value.get("latitude") > 0.0);
+
         flightLines.print(Printed.toSysOut());
         weatherLines.print(Printed.toSysOut());
 
 
 
-            KStream<String, String> flightsWithNearestStationId = flightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation(value), value));
+            KStream<String, JSONObject> flightsWithNearestStationId = filteredFlightLines.map((key, value) -> KeyValue.pair(DatabaseAccessor.getNearestStation((Double) value.get("latitude"),(Double) value.get("longitude")), value));
             flightsWithNearestStationId.print(Printed.toSysOut());
 
 
