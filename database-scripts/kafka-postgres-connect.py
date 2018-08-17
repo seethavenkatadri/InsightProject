@@ -25,7 +25,7 @@ def get_new_messages(topic):
 
     return consumer
 
-def insert_status(record):
+def insert_status(key,value):
     """ insert a new record into the flying conditions table """
     sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO)
              VALUES(%s,%s);"""
@@ -39,7 +39,7 @@ def insert_status(record):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (record['flight-id'],record['geoinfo'],))
+        cur.execute(sql, (key,value,))
         # commit the changes to the database
         conn.commit()
         # close communication with the database
@@ -53,6 +53,6 @@ def insert_status(record):
 
 all_messages = get_new_messages('topic-receive-flight')
 for record in all_messages:
-    print(record.value)
-    idvalue = insert_status(record.value)
+    print(record.key,record.value)
+    idvalue = insert_status(record.key,record.value)
     print(idvalue)
