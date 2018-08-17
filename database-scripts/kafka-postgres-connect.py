@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 import psycopg2
 from configparser import ConfigParser
+import json
 
 def config(filename='database.ini', section='postgresql'):
     # create a parser
@@ -28,7 +29,7 @@ def get_new_messages(topic):
 def insert_status(key,value):
     """ insert a new record into the flying conditions table """
     sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO)
-             VALUES(%s,%s);"""
+             VALUES(%s,to_json(CAST(%s AS text)));"""
     conn = None
     state_id = None
     try:
@@ -54,5 +55,5 @@ def insert_status(key,value):
 all_messages = get_new_messages('topic-receive-flight')
 for record in all_messages:
     print(record.key,record.value)
-    idvalue = insert_status(record.key,record.value)
+    idvalue = insert_status(record.key.decode("utf-8") ,record.value.decode("utf-8") )
     print(idvalue)
