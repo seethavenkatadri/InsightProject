@@ -22,6 +22,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 def fetch(limit):
     """ select flight records for display """
     sql = "select flight, ST_AsGeoJSON(ST_GeomFromText('POINT(latitude longitude)', 4326)) from (select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight limit %s) a";
+    print(sql)
     conn = None
     state_id = None
     try:
