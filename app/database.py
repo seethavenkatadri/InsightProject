@@ -21,7 +21,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 
 def fetch(limit):
     """ insert a new record into the flying conditions table """
-    sql = "select * from flight limit %s";
+    sql = "select flight_id AS flight, info ->> 'latitude' as latitude,info ->> 'longitude' as longitude from flight limit %s";
     conn = None
     state_id = None
     try:
@@ -45,6 +45,6 @@ def fetch(limit):
 
 
 my_query = fetch(3)
-
-json_output = json.dumps(my_query)
-print(json_output["info/latitude"])
+print(my_query)
+#json_output = json.dumps(my_query)
+#print(json_output["info/latitude"])
