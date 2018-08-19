@@ -20,8 +20,8 @@ def config(filename='database-fe.ini', section='postgresql'):
     return db
 
 def fetch(limit):
-    """ insert a new record into the flying conditions table """
-    sql = "select flight_id AS flight, info ->> 'latitude' as latitude,info ->> 'longitude' as longitude from flight limit %s";
+    """ select flight records for display """
+    sql = "select flight, ST_AsGeoJSON(ST_GeomFromText('POINT(latitude longitude)', 4326)) from (select flight_id AS flight,info ->> latitude as latitude, info ->> longitude as longitude  from flight limit %s)";
     conn = None
     state_id = None
     try:
