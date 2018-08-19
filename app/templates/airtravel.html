@@ -7,29 +7,72 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body { margin:0; padding:0; }
     #map {
     position:absolute;
+    border-radius: 25px;
     top: 150px;
     left: 150px;
     right: 150px;
     bottom: 150px;
-    border: 2px solid black;
+    border: 2px solid #1572a8;
+    }
+    #mySidenav a {
+    position: absolute;
+    left: -80px;
+    transition: 0.3s;
+    padding: 15px;
+    width: 100px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    }
+
+    #mySidenav a:hover {
+        left: 0; /* On mouse-over, make the elements appear as they should */
+    }
+
+    /* The about link: 20px from the top with a green background */
+    #about {
+        top: 20px;
+        background-color: #1572a8;
+    }
+
+    #home {
+        top: 80px;
+        background-color: #1572a8; /* Blue */
+    }
+
+    #metrics {
+        top: 140px;
+        background-color: #1572a8;
+    }
+
+    #contact {
+        top: 200px;
+        background-color: #1572a8;
     }
   </style>
 </head>
-<body style="background-color:beige;">
-<h1 style="font-family:Palatino;font-style:italic;font-size:300%;color:maroon;text-align:center;">SafeJourney</h1>
+<body>
+<h1 style="font-family:Palatino;font-style:italic;font-size:300%;color:#1572a8;text-align:center;">SafeJourney</h1>
+<div id="mySidenav" class="sidenav">
+  <a href="#" id="about">About</a>
+  <a href="#" id="home">Home</a>
+  <a href="#" id="metrics">Metrics</a>
+  <a href="#" id="contact">Contact</a>
+</div>
 <div id='map'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VldGhhdmVua2F0YWRyaSIsImEiOiJjamtuM2U3OHgwdGpsM3h0aG1sd3JpZGVpIn0.WHIomokVz9RAEUKOjFtY4Q';
-
-var map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/seethavenkatadri/cjkprwduu3xe42rnmrdbf2f4d',
-  center: [-120, 50],
-  zoom: 2
+const map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/seethavenkatadri/cjl1aajbb2iie2snypgtlss29',
+center: [-79.705147, 39.361469],
+zoom: 2.1
 });
 
 var url = 'https://wanderdrone.appspot.com/';
@@ -37,7 +80,7 @@ map.on('load', function() {
 window.setInterval(function() {
         map.getSource('drone').setData(url);
     }, 0.5);
- map.loadImage('{{ url_for('static',filename='img/plane.png')}}', function(error, image) {
+ map.loadImage('{{ url_for('static',filename='img/small.png')}}', function(error, image) {
         if (error) throw error;
         map.addImage('flight', image);
         map.addSource('drone', { type: 'geojson', data: url });
