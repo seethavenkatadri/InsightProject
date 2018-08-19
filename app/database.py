@@ -47,4 +47,4 @@ def fetch(limit):
 my_query = fetch(3)
 
 json_output = json.dumps(my_query)
-print(json_output)
+print(json_output["info/latitude"])
