@@ -75,7 +75,7 @@ center: [-79.705147, 39.361469],
 zoom: 2.1
 });
 
-var url = {% for flight in flights %};
+var url = {% for flight in flights %} {{ flights }} {% endfor %};
 
 map.on('load', function() {
 window.setInterval(function() {
