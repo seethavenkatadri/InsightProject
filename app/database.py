@@ -1,6 +1,7 @@
 import json
 import psycopg2
 from configparser import ConfigParser
+from geojson import Point
 
 def config(filename='database-fe.ini', section='postgresql'):
     # create a parser
@@ -22,7 +23,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 def fetch(limit):
     """ select flight records for display """
    # sql = "select flight, ST_AsGeoJSON(ST_GeomFromText('POINT(latitude longitude)', 4326)) from (select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight limit %s) a";
-    sql = "select flight, $${\"type\": \"Feature\", \"geometry\": { \"type\": \"Point\",\"coordinates\": [$$ || longitude ||','|| latitude || $$]},\"properties\": {\"name\": \"$$ || flight || $$\" }}$$ as geojson from (select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight order by create_date desc limit %s) a;"
+    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight order by create_date desc limit %s;"
     print(sql)
     conn = None
     state_id = None
@@ -48,5 +49,5 @@ def fetch(limit):
 
 my_query = fetch(3)
 print(my_query)
-json_output = json.dumps(my_query)
-print(json_output)
+#json_output = json.dumps(my_query)
+#print(json_output)
