@@ -62,7 +62,7 @@ if __name__ == '__main__':
     ##Limited number of records as of now
     num_records=0
     num_files=0
-    flight_record=["icao24", "callsign", "origin_country", "time_position", "last_contact", "Longitude", "Latitude", "geo_altitude",
+    flight_record=["icao24", "callsign", "origin_country", "time_position", "last_contact", "longitude", "latitude", "geo_altitude",
      "on_ground", "velocity", "true_track", "vertical_rate", "sensors", "baro_altitude", "squawk", "spi",
      "position_source","inputTime"]
     weather_record=["ID","USAF","WBAN","Elevation","Country_Code","Latitude","Longitude","Date","Year","Month","Day","Mean_Temp","Mean_Temp_Count","Mean_Dewpoint",
@@ -89,14 +89,16 @@ if __name__ == '__main__':
                 continue
             arr=record.strip().split(',')
             if topicName == 'topic-flight':
-                resultDict = dict({flight_record[i]:arr[i] for i in range(len(arr) - 1)})
+                tempDict = dict({flight_record[i]:arr[i] for i in range(len(arr) - 1)})
+                resultDict = assign_defaults(tempDict)
             else:
                 resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            finalDict = assign_defaults(resultDict)
-            print(finalDict)
+
+
+            print(resultDict)
             #### because both the arrays have their first element as keys icao24 and ID
-            publish_message(kafkaProducer, topicName,arr[0], json.dumps(finalDict))
+            publish_message(kafkaProducer, topicName,arr[0], json.dumps(resultDict))
 
 
             num_records+=1
