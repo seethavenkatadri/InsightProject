@@ -129,8 +129,8 @@ public class FlightsWithFlyingConditions {
         if (flight != null) {
             JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
             this.icao24 = (String) flightObject.get("icao24");
-            this.latitude = (String) flightObject.get("Latitude");
-            this.longitude = (String) flightObject.get("Longitude");
+            this.latitude = (String) flightObject.get("latitude");
+            this.longitude = (String) flightObject.get("longitude");
             this.origin = (String) flightObject.get("origin_country");
             this.velocity = (String) flightObject.get("velocity");
             this.track = (String) flightObject.get("true_track");
