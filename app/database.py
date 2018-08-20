@@ -48,4 +48,4 @@ def fetch(limit):
 
 
 results = fetch(3)
-print(results['flight'],Point((results['latitude'],results['longitude'])))
+print(results['flight'],Point((float(results['latitude']),float(results['longitude']))))
