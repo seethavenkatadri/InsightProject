@@ -110,7 +110,7 @@ public class StreamProcessor {
 
         flightsWithFlyingConditionsJSON.print(Printed.toSysOut());
 
-        flightsWithFlyingConditionsJSON.to("topic-receive-flight");
+        flightsWithFlyingConditionsJSON.to("topic-flying-conditions");
 
 
 
