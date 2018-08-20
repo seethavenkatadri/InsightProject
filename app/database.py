@@ -47,8 +47,9 @@ def fetch(limit):
 
 
 results = fetch(30)
-for records in results:
-    myPoint=geojson.Point((float(records['latitude']),float(records['longitude'])))
-    dump = geojson.dumps(myPoint, sort_keys=True)
-    print(dump)
-    print(geojson.loads(dump))
+featureList=[]
+for record in results:
+    flightId=record['flight']
+    myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
+    featureList.append=geojson.Feature(geometry=myPoint,id=flightId)
+print(featureList)
