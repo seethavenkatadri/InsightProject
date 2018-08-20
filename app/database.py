@@ -1,7 +1,7 @@
 import json
 import psycopg2
 from configparser import ConfigParser
-from geojson import Point
+import geojson
 
 def config(filename='database-fe.ini', section='postgresql'):
     # create a parser
@@ -48,4 +48,8 @@ def fetch(limit):
 
 
 results = fetch(3)
-print(results['flight'],Point((float(results['latitude']),float(results['longitude']))))
+myFlight=results['flight']
+myPoint=geojson.Point((float(results['latitude']),float(results['longitude'])))
+dump = geojson.dumps(myPoint, sort_keys=True)
+print(dump)
+print(geojson.loads(dump))
