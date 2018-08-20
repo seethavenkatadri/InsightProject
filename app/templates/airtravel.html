@@ -75,7 +75,7 @@ center: [-79.705147, 39.361469],
 zoom: 2.1
 });
 
-var url = 'https://wanderdrone.appspot.com/';
+var url = {{name}};
 
 map.on('load', function() {
 window.setInterval(function() {
@@ -84,7 +84,7 @@ window.setInterval(function() {
  map.loadImage('{{ url_for('static',filename='img/small.png')}}', function(error, image) {
         if (error) throw error;
         map.addImage('flight', image);
-        map.addSource('drone', { type: 'geojson', data: {{name}} });
+        map.addSource('drone', { type: 'geojson', data: url });
         map.addLayer({
             "id": "points",
             "type": "symbol",
