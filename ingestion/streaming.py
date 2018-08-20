@@ -101,11 +101,5 @@ if __name__ == '__main__':
             publish_message(kafkaProducer, topicName,arr[0], json.dumps(resultDict))
 
 
-            num_records+=1
-            if num_records == 10:
-                break
-        num_files+=1
-        if num_files == 5:
-            break
 
 
