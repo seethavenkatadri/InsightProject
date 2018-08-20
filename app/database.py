@@ -47,7 +47,7 @@ def fetch(limit):
             conn.close()
 
 
-results = fetch(3)
+results = fetch(30)
 myFlight=results['flight']
 myPoint=geojson.Point((float(results['latitude']),float(results['longitude'])))
 dump = geojson.dumps(myPoint, sort_keys=True)
