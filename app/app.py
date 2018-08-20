@@ -50,9 +50,8 @@ def get_results(limit):
     results = fetch(limit)
     featureList=[]
     for record in results:
-        flightId=record['flight']
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
-        featureList.append(geojson.Feature(geometry=myPoint,id=flightId))
+        featureList.append(geojson.Feature(geometry=myPoint,properties=record['flight']))
     return featureList
 
 app = Flask(__name__,static_url_path='/static')
