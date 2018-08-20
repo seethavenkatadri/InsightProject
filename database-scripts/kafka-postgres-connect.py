@@ -22,14 +22,14 @@ def config(filename='database.ini', section='postgresql'):
 
 def get_new_messages(topic):
     consumer = KafkaConsumer(bootstrap_servers='ec2-35-160-138-85.us-west-2.compute.amazonaws.com:9092,ec2-34-218-19-12.us-west-2.compute.amazonaws.com:9092,ec2-54-148-69-162.us-west-2.compute.amazonaws.com:9092,ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092')
-    consumer.subscribe(['topic-flying-conditions'])
+    consumer.subscribe([topic])
 
     return consumer
 
 def insert_status(key,value):
     """ insert a new record into the flying conditions table """
     sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO, CREATE_DATE)
-             VALUES(%s,to_json(CAST(%s AS text)),current_timestamp);"""
+             VALUES(%s,CAST(%s AS text),current_timestamp);"""
     conn = None
     state_id = None
     try:
@@ -52,7 +52,7 @@ def insert_status(key,value):
             conn.close()
 
 
-all_messages = get_new_messages('topic-receive-flight')
+all_messages = get_new_messages('topic-flying-conditions')
 for record in all_messages:
     print(record.key,record.value)
     idvalue = insert_status(record.key.decode("utf-8") ,record.value.decode("utf-8") )
