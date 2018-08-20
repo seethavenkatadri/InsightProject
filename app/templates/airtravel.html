@@ -75,7 +75,7 @@ center: [-79.705147, 39.361469],
 zoom: 2.1
 });
 
-
+var flist = {{ flights|tojson }}
 
 map.on('load', function() {
 window.setInterval(function() {
@@ -86,8 +86,7 @@ window.setInterval(function() {
         map.addImage('flight', image);
         map.addSource('drone', { type: 'geojson', data: {
                 "type": "FeatureCollection",
-                "features": {{flights}}
-
+                "features": flist
                  });
         map.addLayer({
             "id": "points",
