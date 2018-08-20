@@ -47,7 +47,5 @@ def fetch(limit):
             conn.close()
 
 
-my_query = fetch(3)
-print(my_query)
-#json_output = json.dumps(my_query)
-#print(json_output)
+results = fetch(3)
+print(results['flight'],results['latitude'],results['longitude'])
