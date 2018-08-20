@@ -47,8 +47,8 @@ def fetch(limit):
 
 
 results = fetch(30)
-myFlight=results['flight']
-myPoint=geojson.Point((float(results['latitude']),float(results['longitude'])))
-dump = geojson.dumps(myPoint, sort_keys=True)
-print(dump)
-print(geojson.loads(dump))
+for records in results:
+    myPoint=geojson.Point((float(records['latitude']),float(records['longitude'])))
+    dump = geojson.dumps(myPoint, sort_keys=True)
+    print(dump)
+    print(geojson.loads(dump))
