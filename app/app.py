@@ -61,7 +61,7 @@ results=get_results(30)
 
 @app.route('/')
 def main():
-    return render_template('airtravel.html')
+    return render_template('airtravel.html',flights=results)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',flights=results)
+    app.run(host='0.0.0.0')
