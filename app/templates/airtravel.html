@@ -77,20 +77,17 @@ zoom: 2.1
 
 
 map.on('load', function() {
-window.setInterval(function() {
-        map.getSource('drone').setData(url);
-    }, 0.5);
  map.loadImage('{{ url_for('static',filename='img/small.png')}}', function(error, image) {
         if (error) throw error;
         map.addImage('flight', image);
-        map.addSource('drone', { type: 'geojson', data: {
+        map.addSource('fdata', { type: 'geojson', data: {
                 "type": "FeatureCollection",
                 "features": {{ flights|tojson }}
                  });
         map.addLayer({
             "id": "points",
             "type": "symbol",
-            "source": "drone",
+            "source": "fdata",
             "layout": {
                 "icon-image": "flight",
                 "icon-size": 0.25,
