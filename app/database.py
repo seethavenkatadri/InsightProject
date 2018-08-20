@@ -24,7 +24,6 @@ def fetch(limit):
     """ select flight records for display """
    # sql = "select flight, ST_AsGeoJSON(ST_GeomFromText('POINT(latitude longitude)', 4326)) from (select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight limit %s) a";
     sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from flight order by create_date desc limit %s;"
-    print(sql)
     conn = None
     state_id = None
     try:
@@ -39,7 +38,7 @@ def fetch(limit):
         r = [dict((cur.description[i][0], value) \
                   for i, value in enumerate(row)) for row in cur.fetchall()]
         cur.connection.close()
-        return (r[0] if r else None)
+        return r
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
