@@ -27,10 +27,10 @@ def get_all_bucket_files(my_bucket):
 
 def assign_defaults(dict):
     "Function to set default inputs for latitude and longitude"
-    if dict["Latitude"] == "":
-        dict["Latitude"] = '0.0'
-    if dict["Longitude"] == "":
-        dict["Longitude"] = '0.0'
+    if dict["latitude"] == "":
+        dict["latitude"] = '0.0'
+    if dict["longitude"] == "":
+        dict["longitude"] = '0.0'
     return dict
 
 
