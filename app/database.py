@@ -51,5 +51,5 @@ featureList=[]
 for record in results:
     flightId=record['flight']
     myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
-    featureList.append=geojson.Feature(geometry=myPoint,id=flightId)
+    featureList.append(geojson.Feature(geometry=myPoint,id=flightId))
 print(featureList)
