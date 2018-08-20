@@ -22,7 +22,7 @@ def config(filename='database.ini', section='postgresql'):
 
 def get_new_messages(topic):
     consumer = KafkaConsumer(bootstrap_servers='ec2-35-160-138-85.us-west-2.compute.amazonaws.com:9092,ec2-34-218-19-12.us-west-2.compute.amazonaws.com:9092,ec2-54-148-69-162.us-west-2.compute.amazonaws.com:9092,ec2-54-149-61-226.us-west-2.compute.amazonaws.com:9092')
-    consumer.subscribe(['topic-receive-flight'])
+    consumer.subscribe(['topic-flying-conditions'])
 
     return consumer
 
