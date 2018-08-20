@@ -4,12 +4,25 @@
   <meta charset='utf-8' />
   <title>SafeJourney</title>
   <link rel="shortcut icon" href="{{ url_for('static',filename='img/favicon.ico')}}">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Amatic+SC" />
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
+    * {
+      font-family: "Amatic SC";
+    }
     body { margin:0; padding:0; }
+    h1 { font-family: "Amatic SC"; font-size: 56px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; text-align:center;top: 50px;}
+
+    #wrapper {
+    margin-left:auto;
+    margin-right:auto;
+    position:absolute;
+    top: 0px;
+    }
+
     #map {
     position:absolute;
     border-radius: 25px;
@@ -18,15 +31,16 @@
     right: 150px;
     bottom: 150px;
     border: 2px solid #1572a8;
+    /* margin-bottom:200px; */
     }
     #mySidenav a {
     position: absolute;
     left: -80px;
     transition: 0.3s;
-    padding: 15px;
-    width: 100px;
+    padding: 10px;
+    width: 120px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 28px;
     color: white;
     border-radius: 0 5px 5px 0;
     }
@@ -39,6 +53,12 @@
     #about {
         top: 20px;
         background-color: #1572a8;
+    }
+
+
+    #aboutcontent {
+        margin-top: 850px;
+        color: #1572a8;
     }
 
     #home {
@@ -58,14 +78,17 @@
   </style>
 </head>
 <body>
-<h1 style="font-family:Palatino;font-style:italic;font-size:300%;color:#1572a8;text-align:center;">SafeJourney</h1>
+<h1>SafeJourney</h1>
 <div id="mySidenav" class="sidenav">
-  <a href="#" id="about">About</a>
+  <a href="#aboutcontent" id="about">About</a>
   <a href="#" id="home">Home</a>
   <a href="#" id="metrics">Metrics</a>
   <a href="#" id="contact">Contact</a>
 </div>
-<div id='map'></div>
+
+
+<div id='map'>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VldGhhdmVua2F0YWRyaSIsImEiOiJjamtuM2U3OHgwdGpsM3h0aG1sd3JpZGVpIn0.WHIomokVz9RAEUKOjFtY4Q';
 const map = new mapboxgl.Map({
@@ -92,15 +115,42 @@ map.on('load', function() {
             },
             "layout": {
                 "icon-image": "flight",
-                "text-field": "{id}",
-                "icon-size": 0.25,
-                "text-offset": [0, 0.6],
-                "text-anchor": "top"
+                "icon-size": 0.2
             }
         });
     });
 
 
+  var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    });
+
+    map.on('mouseenter', 'points', function(e) {
+        // Change the cursor style as a UI indicator.
+        map.getCanvas().style.cursor = 'pointer';
+
+        var coordinates = e.features[0].geometry.coordinates.slice();
+        var description = e.features[0].properties.id;
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup.setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    });
+
+    map.on('mouseleave', 'points', function() {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+    });
 
      map.addSource('earthquakes', {
         "type": "geojson",
@@ -166,5 +216,14 @@ map.on('load', function() {
 });
 
 </script>
+
+  </div>
+
+  <p id='aboutcontent'> <aboutcontent>
+  This is about me content
+  </aboutcontent></p>
+
+
+
 </body>
 </html>
