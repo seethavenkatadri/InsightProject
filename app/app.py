@@ -64,4 +64,4 @@ def main():
     return render_template('airtravel.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',flights=results)
+    app.run(host='0.0.0.0',name=results)

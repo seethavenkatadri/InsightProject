@@ -84,7 +84,7 @@ window.setInterval(function() {
  map.loadImage('{{ url_for('static',filename='img/small.png')}}', function(error, image) {
         if (error) throw error;
         map.addImage('flight', image);
-        map.addSource('drone', { type: 'geojson', data: flights });
+        map.addSource('drone', { type: 'geojson', data: {{name}} });
         map.addLayer({
             "id": "points",
             "type": "symbol",
