@@ -77,23 +77,23 @@ zoom: 2.1
 
 
 map.on('load', function() {
- map.loadImage('{{ url_for('static',filename='img/small.png')}}', function(error, image) {
-        if (error) throw error;
-        map.addImage('flight', image);
-        map.addSource('fdata', { type: 'geojson', data: {
+   map.addLayer({
+        "id": "points",
+        "type": "symbol",
+        "source": {
+            "type": "geojson",
+            "data": {
                 "type": "FeatureCollection",
                 "features": {{ flights|tojson }}
-                 });
-        map.addLayer({
-            "id": "points",
-            "type": "symbol",
-            "source": "fdata",
-            "layout": {
-                "icon-image": "flight",
-                "icon-size": 0.25,
-                "icon-rotate":90
             }
-        });
+        },
+        "layout": {
+            "icon-image": "{{ url_for('static',filename='img/small.png') }}",
+            "text-field": "flight",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 0.6],
+            "text-anchor": "top"
+        }
     });
 
      map.addSource('earthquakes', {
