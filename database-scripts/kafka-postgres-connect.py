@@ -29,7 +29,7 @@ def get_new_messages(topic):
 def insert_status(key,value):
     """ insert a new record into the flying conditions table """
     sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO, CREATE_DATE)
-             VALUES(%s,CAST(%s AS text),current_timestamp);"""
+             VALUES(%s,%s,current_timestamp);"""
     conn = None
     state_id = None
     try:
