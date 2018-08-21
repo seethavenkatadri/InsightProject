@@ -49,7 +49,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 
 def fetch_flights(limit):
     """ select flight records for display """
-    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from from flight f where date_trunc('day',f.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
+    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from  flight f where date_trunc('day',f.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
     conn = None
     state_id = None
     try:
