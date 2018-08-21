@@ -55,9 +55,9 @@ def insert_status(topic,key,value):
         if conn is not None:
             conn.close()
 
-
-all_messages = get_new_messages(sys.argv[1])
+topic=sys.argv[1]
+all_messages = get_new_messages(topic)
 for record in all_messages:
     print(record.key,record.value)
-    idvalue = insert_status(record.key.decode("utf-8") ,record.value.decode("utf-8") )
+    idvalue = insert_status(topic,record.key.decode("utf-8") ,record.value.decode("utf-8") )
     print(idvalue)
