@@ -114,8 +114,8 @@ public class StreamProcessor {
 
 
         flightsWithFlyingConditionsJSON.to("topic-flying-conditions");
-      //  KStream <String, String> latestWeatherStream = weatherTable.toStream();
-      //  latestWeatherStream.to("topic-latest-weather");
+        KStream <String, String> latestWeatherStream = weatherTable.toStream();
+        latestWeatherStream.to("topic-latest-weather");
 
 
 
