@@ -211,8 +211,8 @@ map.on('load', function() {
         </tr>
     {% for row in weatherdata %}
         <tr>
-        {% for d in row.items() %}
-            <td>{{ d }}</td>
+        {% for key,value in row.items() %}
+            <td>{{ value }}</td>
         {% endfor %}
         </tr>
     {% endfor %}
