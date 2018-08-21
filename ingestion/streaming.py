@@ -92,6 +92,7 @@ if __name__ == '__main__':
                 tempDict = dict({flight_record[i]:arr[i] for i in range(len(arr) - 1)})
                 resultDict = assign_defaults(tempDict)
             else:
+                arr[0] = arr[0].replace("-", "")
                 resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
