@@ -86,7 +86,7 @@ def get_weather_results(limit):
     for record in results:
         myPoint = geojson.Point((float(record['latitude']), float(record['longitude'])))
         weatherFeatureList.append(geojson.Feature(geometry=myPoint))
-        weatherDataList.append((record['station'],record['visibility'],record['windspeed'],record['precipitation']))
+        weatherDataList.append(record)
     return weatherFeatureList, weatherDataList
 
 app = Flask(__name__,static_url_path='/static')
