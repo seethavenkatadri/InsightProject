@@ -49,7 +49,7 @@ def fetch_flights(limit):
 
 def fetch_weather(limit):
     """ select flight records for display """
-    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed  from weather order by create_date desc limit %s;"
+    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, info ->> 'Precipitation' as precipitation  from weather order by create_date desc limit %s;"
     conn = None
     state_id = None
     try:
