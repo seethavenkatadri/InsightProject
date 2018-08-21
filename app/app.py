@@ -47,7 +47,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 
     return db
 
-def fetch_flights(limit):
+def fetch_flights():
     """ select flight records for display """
     sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude  from  flight f where date_trunc('day',f.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
     conn = None
@@ -60,7 +60,7 @@ def fetch_flights(limit):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (limit,))
+        cur.execute(sql)
         r = [dict((cur.description[i][0], value) \
                   for i, value in enumerate(row)) for row in cur.fetchall()]
         cur.connection.close()
@@ -71,7 +71,7 @@ def fetch_flights(limit):
         if conn is not None:
             conn.close()
 
-def fetch_weather(limit):
+def fetch_weather():
     """ select flight records for display """
     sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, info ->> 'Precipitation' as precipitation  from weather w where date_trunc('day',w.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from weather wi where wi.station_id = w.station_id);"
     conn = None
@@ -84,7 +84,7 @@ def fetch_weather(limit):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (limit,))
+        cur.execute(sql)
         r = [dict((cur.description[i][0], value) \
                   for i, value in enumerate(row)) for row in cur.fetchall()]
         cur.connection.close()
@@ -95,16 +95,16 @@ def fetch_weather(limit):
         if conn is not None:
             conn.close()
 
-def get_flight_results(limit):
-    results = fetch_flights(limit)
+def get_flight_results():
+    results = fetch_flights()
     flightFeatureList=[]
     for record in results:
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
         flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight']}))
     return flightFeatureList
 
-def get_weather_results(limit):
-    results = fetch_weather(limit)
+def get_weather_results():
+    results = fetch_weather()
     tmpDict={}
     weatherFeatureList = []
     weatherDataList = []
@@ -133,15 +133,15 @@ weather_points=[]
 #weather_results=[{'windspeed': '15.5', 'visibility': '2.2', 'latitude': '53.617', 'precipitation': '0.00', 'station': '03396099999', 'longitude': '0.15'}, {'windspeed': '14.3', 'visibility': '2.2', 'latitude': '53.03', 'precipitation': '0.00', 'station': '03379099999', 'longitude': '-0.483'}, {'windspeed': '23.9', 'visibility': '12.4', 'latitude': '53.317', 'precipitation': '0.00', 'station': '03311099999', 'longitude': '-4.617'}, {'windspeed': '8.2', 'visibility': '5.2', 'latitude': '55.017', 'precipitation': '0.00', 'station': '03262099999', 'longitude': '-1.417'}, {'windspeed': '12.0', 'visibility': '9.3', 'latitude': '56.033', 'precipitation': '0.00', 'station': '03159099999', 'longitude': '-3.133'}, {'windspeed': '11.0', 'visibility': '10.9', 'latitude': '57.202', 'precipitation': '0.00', 'station': '03091099999', 'longitude': '-2.198'}, {'windspeed': '4.8', 'visibility': '12.4', 'latitude': '60.133', 'precipitation': '0.00', 'station': '03005099999', 'longitude': '-1.183'}, {'windspeed': '15.5', 'visibility': '2.2', 'latitude': '53.617', 'precipitation': '0.00', 'station': '03396099999', 'longitude': '0.15'}, {'windspeed': '14.3', 'visibility': '2.2', 'latitude': '53.03', 'precipitation': '0.00', 'station': '03379099999', 'longitude': '-0.483'}, {'windspeed': '23.9', 'visibility': '12.4', 'latitude': '53.317', 'precipitation': '0.00', 'station': '03311099999', 'longitude': '-4.617'}, {'windspeed': '8.2', 'visibility': '5.2', 'latitude': '55.017', 'precipitation': '0.00', 'station': '03262099999', 'longitude': '-1.417'}, {'windspeed': '12.0', 'visibility': '9.3', 'latitude': '56.033', 'precipitation': '0.00', 'station': '03159099999', 'longitude': '-3.133'}, {'windspeed': '11.0', 'visibility': '10.9', 'latitude': '57.202', 'precipitation': '0.00', 'station': '03091099999', 'longitude': '-2.198'}, {'windspeed': '4.8', 'visibility': '12.4', 'latitude': '60.133', 'precipitation': '0.00', 'station': '03005099999', 'longitude': '-1.183'}]
 @app.route('/')
 def main():
-    flight_results = get_flight_results(300)
-    weather_points, weather_results = get_weather_results(300)
+    flight_results = get_flight_results()
+    weather_points, weather_results = get_weather_results()
     #print(flight_results)
     #print(weather_points)
     #print(weather_results)
     return render_template('airtravel.html',flights=flight_results, weatherpoints=weather_points, weatherdata=weather_results)
 
 if __name__ == '__main__':
-    scheduler = Scheduler(10, main)
+    scheduler = Scheduler(5, main)
     scheduler.start()
     app.run(host='0.0.0.0')
     scheduler.stop()
