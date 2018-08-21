@@ -29,10 +29,10 @@ def get_new_messages(topic):
 def insert_status(topic,key,value):
     """ insert a new record into the flying conditions table """
     if topic == 'topic-flying-conditions':
-        sql = """INSERT INTO FLIGHT(FLIGHT_ID,INFO, CREATE_DATE)
+        sql = """INSERT INTO POSTGRES.FLIGHT(FLIGHT_ID,INFO, CREATE_DATE)
                  VALUES(%s,%s,current_timestamp);"""
     else:
-        sql = """INSERT INTO WEATHER(STATION_ID,INFO, CREATE_DATE)
+        sql = """INSERT INTO POSTGRES.WEATHER(STATION_ID,INFO, CREATE_DATE)
                         VALUES(%s,%s,current_timestamp);"""
     conn = None
     state_id = None
@@ -59,5 +59,4 @@ topic=sys.argv[1]
 all_messages = get_new_messages(topic)
 for record in all_messages:
     print(record.key,record.value)
-    idvalue = insert_status(topic,record.key.decode("utf-8") ,record.value.decode("utf-8") )
-    print(idvalue)
+    insert_status(topic,record.key.decode("utf-8") ,record.value.decode("utf-8") )
