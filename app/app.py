@@ -49,7 +49,7 @@ def fetch_flights(limit):
 
 def fetch_weather(limit):
     """ select flight records for display """
-    sql = "select station_id AS station, info  from latest_weather order by create_date desc limit %s;"
+    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed  from weather order by create_date desc limit %s;"
     conn = None
     state_id = None
     try:
@@ -81,7 +81,11 @@ def get_flight_results(limit):
 
 def get_weather_results(limit):
     results = fetch_weather(limit)
-    return results
+    weatherFeatureList = []
+    for record in results:
+        myPoint = geojson.Point((float(record['latitude']), float(record['longitude'])))
+        weatherFeatureList.append(geojson.Feature(geometry=myPoint, properties={"vis": record['visibility'],"ws":record['windspeed']}))
+    return weatherFeatureList
 
 app = Flask(__name__,static_url_path='/static')
 app.config['DEBUG'] = True
