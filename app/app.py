@@ -99,6 +99,7 @@ def get_flight_results():
     results = fetch_flights()
     flightFeatureList=[]
     for record in results:
+        print(record['latitude'],record['longitude'])
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
         flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight']}))
     return flightFeatureList
