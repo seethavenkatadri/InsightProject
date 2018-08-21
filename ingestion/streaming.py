@@ -21,7 +21,7 @@ def get_all_bucket_files(my_bucket):
 
     fileHandleList=[]
     ## getting all files in csv folder
-    for object in my_bucket.objects.filter(Prefix='sample_data/'):
+    for object in my_bucket.objects.filter(Prefix='latest_data/'):
         fileHandleList.append(get_file_handle(my_bucket, object.key))
     return fileHandleList
 
