@@ -14,7 +14,12 @@
       font-family: "Amatic SC";
     }
     body { margin:0; padding:0; }
-    h1 { font-family: "Amatic SC"; font-size: 56px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; text-align:center;top: 50px;}
+    h1 { font-family: "Amatic SC"; font-size: 56px; color: #1572a8; font-weight: 700; line-height: 26.4px; text-align:center;top: 50px;}
+    h2 { font-family: "Amatic SC"; font-size: 36px; text-align:left;top: 50px;color: #1572a8;padding: 15px}
+    p { font-family: "Amatic SC"; font-size: 28px; text-align:left;top: 50px;color: #1572a8;padding: 15px}
+    table {border-collapse: collapse;text-align: left;border-spacing: 5px;}
+    th {border-collapse: collapse;padding: 15px;text-align: left;}
+    td {border-collapse: collapse;padding: 15px;}
 
     #wrapper {
     margin-left:auto;
@@ -31,10 +36,18 @@
     right: 150px;
     bottom: 150px;
     border: 2px solid #1572a8;
-    /* margin-bottom:200px; */
     }
+
+    #myTable {
+    position:absolute;
+    border-radius: 25px;
+    top: 750px;
+    left: 150px;
+    border: 2px solid #1572a8;
+    }
+
     #mySidenav a {
-    position: absolute;
+    position: fixed;
     left: -80px;
     transition: 0.3s;
     padding: 10px;
@@ -57,8 +70,22 @@
 
 
     #aboutcontent {
-        margin-top: 850px;
+        position:absolute;
         color: #1572a8;
+        border-radius: 25px;
+        top: 1000px;
+        left: 150px;
+        right: 150px;
+        bottom: 150px;
+        border: 2px solid #1572a8;
+    }
+
+    #mycontact {
+    position:absolute;
+    border-radius: 25px;
+    top: 1250px;
+    left: 150px;
+    border: 2px solid #1572a8;
     }
 
     #home {
@@ -79,11 +106,12 @@
 </head>
 <body>
 <h1>SafeJourney</h1>
+<h3><p style="margin-left:150px;">Hover over a flight to know more details</p></h3>
 <div id="mySidenav" class="sidenav">
   <a href="#aboutcontent" id="about">About</a>
   <a href="#" id="home">Home</a>
   <a href="#" id="metrics">Metrics</a>
-  <a href="#" id="contact">Contact</a>
+  <a href="#mycontact" id="contact">Contact</a>
 </div>
 
 
@@ -120,6 +148,26 @@ map.on('load', function() {
         });
     });
 
+    map.loadImage('{{ url_for('static',filename='img/rain.png')}}', function(error, image) {
+       if (error) throw error;
+       map.addImage('cloud', image);
+       map.addLayer({
+           "id": "cloud",
+           "type": "symbol",
+           "source": {
+               "type": "geojson",
+               "data": {
+                   "type": "FeatureCollection",
+                   "features": {{ weatherpoints|tojson }}
+               }
+           },
+           "layout": {
+               "icon-image": "cloud",
+               "icon-size": 0.4
+           }
+       });
+   });
+
 
   var popup = new mapboxgl.Popup({
         closeButton: false,
@@ -127,21 +175,15 @@ map.on('load', function() {
     });
 
     map.on('mouseenter', 'points', function(e) {
-        // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = 'pointer';
 
         var coordinates = e.features[0].geometry.coordinates.slice();
-        var description = e.features[0].properties.id;
+        var description = "Flight ID:" + e.features[0].properties.id + "</br>Station ID:" + "</br>FC Index:";
 
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        // Populate the popup and set its coordinates
-        // based on the feature found.
         popup.setLngLat(coordinates)
             .setHTML(description)
             .addTo(map);
@@ -151,79 +193,41 @@ map.on('load', function() {
         map.getCanvas().style.cursor = '';
         popup.remove();
     });
-
-     map.addSource('earthquakes', {
-        "type": "geojson",
-        "data": "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
-    });
-
-    map.addLayer({
-        "id": "earthquakes-heat",
-        "type": "heatmap",
-        "source": "earthquakes",
-        "maxzoom": 9,
-        "paint": {
-            // Increase the heatmap weight based on frequency and property magnitude
-            "heatmap-weight": [
-                "interpolate",
-                ["linear"],
-                ["get", "mag"],
-                0, 0,
-                6, 1
-            ],
-            // Increase the heatmap color weight weight by zoom level
-            // heatmap-intensity is a multiplier on top of heatmap-weight
-            "heatmap-intensity": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                0, 1,
-                9, 3
-            ],
-            // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-            // Begin color ramp at 0-stop with a 0-transparancy color
-            // to create a blur-like effect.
-            "heatmap-color": [
-                "interpolate",
-                ["linear"],
-                ["heatmap-density"],
-                0, "rgba(33,102,172,0)",
-                0.2, "rgb(103,169,207)",
-                0.4, "rgb(209,229,240)",
-                0.6, "rgb(253,219,199)",
-                0.8, "rgb(239,138,98)",
-                1, "rgb(178,24,43)"
-            ],
-            // Adjust the heatmap radius by zoom level
-            "heatmap-radius": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                0, 2,
-                9, 20
-            ],
-            // Transition from heatmap to circle layer by zoom level
-            "heatmap-opacity": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                7, 1,
-                9, 0
-            ],
-        }
-    });
-
 });
+
 
 </script>
 
   </div>
 
-  <p id='aboutcontent'> <aboutcontent>
-  This is about me content
-  </aboutcontent></p>
-
-
-
+<div id="myTable" class="wtable" style="position: relative;;width:75%">
+  <h2>Weather Station Updates</h2>
+  <table style="width:100%">
+    <tr>
+          <th>Station ID</th>
+          <th>Visibility</th>
+          <th>Wind Speed</th>
+          <th>Precipitation</th>
+        </tr>
+    {% for row in weatherdata %}
+        <tr>
+        {% for d in row.items() %}
+            <td>{{ d }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+</div>
+  <div id="aboutcontent" style="position: relative;width:75%">
+    <h2>About SafeJourney</h2>
+    <p>SafeJourney is a flight tracking application that also provides weather updates in real-time. In the map, the clouds represent bad weather area. The end users can thus see that the flight is approaching bad weather.</p>
+  </div>
+ <div id="mycontact" style="position: relative;width:75%">
+    <h2>Seetha Venkatadri</h2>
+    <p>
+      <a href="https://www.linkedin.com/in/seethavenkatadri" style="underlined;color: #1572a8">LinkedIn</a><br/><br/>
+      <a href="https://github.com/seethavenkatadri/InsightProject" style="underlined;color: #1572a8">GitHub</a>
+    </p>
+  </div>
 </body>
 </html>
