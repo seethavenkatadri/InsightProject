@@ -135,13 +135,13 @@ weather_points=[]
 def main():
     flight_results = get_flight_results(300)
     weather_points, weather_results = get_weather_results(300)
-    print(flight_results)
-    print(weather_points)
-    print(weather_results)
+    #print(flight_results)
+    #print(weather_points)
+    #print(weather_results)
     return render_template('airtravel.html',flights=flight_results, weatherpoints=weather_points, weatherdata=weather_results)
 
 if __name__ == '__main__':
-    scheduler = Scheduler(5, main)
+    scheduler = Scheduler(10, main)
     scheduler.start()
     app.run(host='0.0.0.0')
     scheduler.stop()
