@@ -1,7 +1,7 @@
 # SafeJourney
-Real-time data pipeline platform to track flight status along with weather updates 
+A real-time data pipeline to track where exactly a flight is affected by bad weather
 
-[Link] (bit.ly/safejourney-slides)
+[Link](bit.ly/safejourney-slides) to presentation
 
 <hr/>
 
