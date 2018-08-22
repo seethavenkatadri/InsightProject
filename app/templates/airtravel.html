@@ -145,7 +145,7 @@ map.on('load', function() {
                 "icon-image": "flight",
                 "icon-size": 0.2,
                 "icon-rotation-alignment": "map",
-                "icon-rotate": {{ angles|tojson }}
+                "icon-rotate": <% (Math.floor(Math.random() * 360) %>
             }
         });
     });
