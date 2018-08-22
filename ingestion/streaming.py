@@ -33,10 +33,10 @@ def assign_defaults(topic,dict):
         if dict["longitude"] == "":
             dict["longitude"] = '0.0'
     else:
-        if dict["Latitude"] == "":
-            dict["Latitude"] = '0.0'
-        if dict["Longitude"] == "":
-            dict["Longitude"] = '0.0'
+        if dict["latitude"] == "":
+            dict["latitude"] = '0.0'
+        if dict["longitude"] == "":
+            dict["longitude"] = '0.0'
     return dict
 
 def get_station_data():
