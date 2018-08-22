@@ -49,7 +49,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 
 def fetch_flights():
     """ select flight records for display """
-    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude, info ->> 'true_track' as angle  from  flight f where date_trunc('day',f.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
+    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude, info ->> 'track' as angle  from  flight f where date_trunc('day',f.create_date) = date_trunc('day',current_timestamp) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
     conn = None
     state_id = None
     try:
@@ -99,7 +99,7 @@ def get_flight_results():
     results = fetch_flights()
     flightFeatureList=[]
     for record in results:
-        print(record['latitude'],record['longitude'])
+        print("flights:",record['latitude'],record['longitude'])
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
         flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight'], "angle" : record['angle']}))
     return flightFeatureList
@@ -110,6 +110,7 @@ def get_weather_results():
     weatherFeatureList = []
     weatherDataList = []
     for record in results:
+        print("weather:", record['latitude'], record['longitude'])
         myPoint = geojson.Point((float(record['latitude']), float(record['longitude'])))
         weatherFeatureList.append(geojson.Feature(geometry=myPoint))
         tmpDict['station'] = record['station']
