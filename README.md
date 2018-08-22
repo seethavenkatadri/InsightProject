@@ -5,10 +5,6 @@ Flight status tracker that can also track weather changes
 
 <hr/>
 
-## How to install and get it up and running
-
-
-<hr/>
 
 ## Introduction
 Building the data pipeline for a flight tracker application to analyze the data engineering challenges involved.  Flight status data will be used along with NOAA weather dataset to provide parallel updates on weather and flight status. End users - Airport ground station officials, pilots and anyone who wants to check for flight status updates and where exactly the flight is affected by weather
