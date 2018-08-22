@@ -25,12 +25,18 @@ def get_all_bucket_files(my_bucket):
         fileHandleList.append(get_file_handle(my_bucket, object.key))
     return fileHandleList
 
-def assign_defaults(dict):
+def assign_defaults(topic,dict):
     "Function to set default inputs for latitude and longitude"
-    if dict["latitude"] == "":
-        dict["latitude"] = '0.0'
-    if dict["longitude"] == "":
-        dict["longitude"] = '0.0'
+    if topic == 'topic-flying-conditions':
+        if dict["latitude"] == "":
+            dict["latitude"] = '0.0'
+        if dict["longitude"] == "":
+            dict["longitude"] = '0.0'
+    else:
+        if dict["Latitude"] == "":
+            dict["Latitude"] = '0.0'
+        if dict["Longitude"] == "":
+            dict["Longitude"] = '0.0'
     return dict
 
 def get_station_data():
@@ -106,10 +112,11 @@ if __name__ == '__main__':
                 resultDict = assign_defaults(tempDict)
             else:
                 arr[0] = arr[0].replace("-", "")
-                resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
-                resultDict["ID"]=stationIds[counter][0]
-                resultDict["USAF"] = stationIds[counter][1]
-                resultDict["WBAN"] = stationIds[counter][2]
+                tempDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
+                tempDict["ID"]=stationIds[counter][0]
+                tempDict["USAF"] = stationIds[counter][1]
+                tempDict["WBAN"] = stationIds[counter][2]
+                resultDict = assign_defaults(tempDict)
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
