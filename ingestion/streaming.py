@@ -109,14 +109,14 @@ if __name__ == '__main__':
             arr=record.strip().split(',')
             if topicName == 'topic-flight':
                 tempDict = dict({flight_record[i]:arr[i] for i in range(len(arr) - 1)})
-                resultDict = assign_defaults(tempDict)
+                resultDict = assign_defaults(topicName,tempDict)
             else:
                 arr[0] = arr[0].replace("-", "")
                 tempDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
                 tempDict["ID"]=stationIds[counter][0]
                 tempDict["USAF"] = stationIds[counter][1]
                 tempDict["WBAN"] = stationIds[counter][2]
-                resultDict = assign_defaults(tempDict)
+                resultDict = assign_defaults(topicName,tempDict)
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
