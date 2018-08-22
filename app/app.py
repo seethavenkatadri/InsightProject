@@ -103,7 +103,7 @@ def get_flight_results():
         print("flights:",record['latitude'],record['longitude'])
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
         flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight']}))
-        angleList.append({ "type": "identity", "property": record['angle'] })
+        angleList.append(record['angle'])
     return flightFeatureList,angleList
 
 def get_weather_results():
