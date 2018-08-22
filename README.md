@@ -16,7 +16,7 @@ SafeJourney is a real-time data processing application which delivers flight sta
 
 ## Dataset
 
-NOAA GSOD dataset from Amazon S3
+NOAA GSOD weather dataset
 </br>
 OpenSky Flight status dataset
 
