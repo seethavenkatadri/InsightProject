@@ -98,11 +98,13 @@ def fetch_weather():
 def get_flight_results():
     results = fetch_flights()
     flightFeatureList=[]
+    angleList=[]
     for record in results:
         print("flights:",record['latitude'],record['longitude'])
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
-        flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight'], "angle" : record['angle']}))
-    return flightFeatureList
+        flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight']}))
+        angleList.append({ "type": "identity", "property": record['angle'] })
+    return flightFeatureList,angleList
 
 def get_weather_results():
     results = fetch_weather()
@@ -123,17 +125,17 @@ def get_weather_results():
     return weatherFeatureList, weatherDataList
 
 def query_db():
-    flight_results = get_flight_results()
+    flight_results,angleList = get_flight_results()
     weather_points, weather_results = get_weather_results()
-    return flight_results,weather_points,weather_results
+    return flight_results,weather_points,weather_results,angleList
 
 app = Flask(__name__,static_url_path='/static')
 app.config['DEBUG'] = True
 
 @app.route('/')
 def main():
-    flight_results, weather_points, weather_results = query_db()
-    return render_template('airtravel.html', flights=flight_results, weatherpoints=weather_points,
+    flight_results, weather_points, weather_results,angleList = query_db()
+    return render_template('airtravel.html', flights=flight_results, angles=angleList,weatherpoints=weather_points,
                     weatherdata=weather_results)
 
 
