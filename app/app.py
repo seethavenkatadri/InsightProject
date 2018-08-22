@@ -100,7 +100,6 @@ def get_flight_results():
     flightFeatureList=[]
     angleList=[]
     for record in results:
-        print("flights:",record['latitude'],record['longitude'])
         myPoint=geojson.Point((float(record['latitude']),float(record['longitude'])))
         flightFeatureList.append(geojson.Feature(geometry=myPoint, properties={"id" : record['flight']}))
         angleList.append(record['angle'])
@@ -112,7 +111,6 @@ def get_weather_results():
     weatherFeatureList = []
     weatherDataList = []
     for record in results:
-        print("weather:", record['latitude'], record['longitude'])
         myPoint = geojson.Point((float(record['latitude']), float(record['longitude'])))
         weatherFeatureList.append(geojson.Feature(geometry=myPoint))
         tmpDict['station'] = record['station']
