@@ -33,6 +33,17 @@ def assign_defaults(dict):
         dict["longitude"] = '0.0'
     return dict
 
+def get_station_data():
+    all_stations = open('weather-stations-data.csv', 'r')
+    skip = 0
+    stationIdList=[]
+    for record in all_stations:
+        if skip == 0:
+            skip += 1
+            continue
+        parsed = record.strip().split(',')
+        stationIdList.append([parsed[0]+parsed[1],parsed[0],parsed[1]])
+    return stationIdList
 
 def publish_message(producerInstance, topic_name, key, value):
     "Function to send messages to the specific topic"
@@ -79,10 +90,12 @@ if __name__ == '__main__':
    # reading one file as of now
     fileHandleList=get_all_bucket_files(myBucket)
     kafkaProducer=connect_kafka_producer()
+    stationIds=get_station_data()
 
     #for file in fileHandleList:
     for file in fileHandleList:
         skip_header=0
+        counter = 0
         for record in codecs.getreader('utf-8')(file.get()[u'Body']):
             if skip_header == 0 and topicName == 'topic-weather':
                 skip_header += 1
@@ -94,12 +107,19 @@ if __name__ == '__main__':
             else:
                 arr[0] = arr[0].replace("-", "")
                 resultDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
+                resultDict["ID"]=stationIds[counter][0]
+                resultDict["USAF"] = stationIds[counter][1]
+                resultDict["WBAN"] = stationIds[counter][2]
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
             print(resultDict)
             #### because both the arrays have their first element as keys icao24 and ID
             publish_message(kafkaProducer, topicName,arr[0], json.dumps(resultDict))
+            if counter < len(stationIds):
+                counter += 1
+            else:
+                counter=0
 
 
 
