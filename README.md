@@ -12,7 +12,7 @@ Building the data pipeline for a flight tracker application to analyze the data 
 
 ## Architecture
 
-![alt text](architecture.png)
+![alt text](images/architecture.png)
 
 ## Dataset
 
