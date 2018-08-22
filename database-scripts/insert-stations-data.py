@@ -1,7 +1,7 @@
 import psycopg2
 from configparser import ConfigParser
 
-def config(filename='/Users/seethadixit/Documents/Insight/Project/gitrepo/InsightProject/database-scripts/database.ini', section='postgresql'):
+def config(filename='database.ini', section='postgresql'):
     # create a parser
     parser = ConfigParser()
     # read config file
@@ -42,7 +42,7 @@ def insert_status(sql):
             conn.close()
 
 
-all_stations=open('/Users/seethadixit/Documents/Insight/Project/random/weather-stations-data.csv','r')
+all_stations=open('weather-stations-data.csv','r')
 skip_header=0
 for record in all_stations:
     if skip_header == 0 :
