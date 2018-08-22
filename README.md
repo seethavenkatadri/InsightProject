@@ -7,7 +7,7 @@ A real-time data pipeline to track where exactly a flight is affected by bad wea
 
 ## Introduction
 
-Building the data pipeline for a flight tracker application to analyze the data engineering challenges involved.  Flight status data will be used along with NOAA weather dataset to provide parallel updates on weather and flight status. End users - Airport ground station officials, pilots and anyone who wants to check for flight status updates and where exactly the flight is affected by weather
+SafeJourney is a real-time data processing application which delivers flight status information along with weather updates to the end users. With this application, the user can find out where exactly a flight is affected by bad weather. The end users of this application are airport ground station officials that monitor flying conditions and also general users looking for flight status updates.
 
 
 ## Architecture
