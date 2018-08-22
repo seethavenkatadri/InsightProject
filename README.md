@@ -1,7 +1,7 @@
 # SafeJourney
 Real-time data pipeline platform to track flight status along with weather updates 
 
-[Link](#) to your presentation.
+[Link](bitly.com/safejourney-github) 
 
 <hr/>
 
