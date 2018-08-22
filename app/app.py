@@ -49,7 +49,7 @@ def config(filename='database-fe.ini', section='postgresql'):
 
 def fetch_flights():
     """ select flight records for display """
-    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude, info ->> 'track' as angle  from  flight f where date_trunc('day',f.create_date) >= date_trunc('day',current_timestamp) - 1 and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
+    sql = "select flight_id AS flight,info ->> 'latitude' as latitude, info ->> 'longitude' as longitude, info ->> 'track' as angle  from  flight f where date_trunc('day',f.create_date) >= date_trunc('day',current_timestamp - interval '1' day) and create_date = (select max(create_date) from flight fi where fi.flight_id = f.flight_id);"
     conn = None
     state_id = None
     try:
@@ -73,7 +73,7 @@ def fetch_flights():
 
 def fetch_weather():
     """ select flight records for display """
-    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, info ->> 'Precipitation' as precipitation  from weather w where date_trunc('day',w.create_date) >= date_trunc('day',current_timestamp) - 1 and create_date = (select max(create_date) from weather wi where wi.station_id = w.station_id);"
+    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, info ->> 'Precipitation' as precipitation  from weather w where date_trunc('day',w.create_date) >= date_trunc('day',current_timestamp - interval '1' day) and create_date = (select max(create_date) from weather wi where wi.station_id = w.station_id);"
     conn = None
     state_id = None
     try:
