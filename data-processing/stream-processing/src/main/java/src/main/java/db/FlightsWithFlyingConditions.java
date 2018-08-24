@@ -138,6 +138,7 @@ public class FlightsWithFlyingConditions {
         }
         if (weather != null) {
             JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
+            System.out.println("Station id : " + (String) weatherObject.get("ID"));
             this.stationId = (String) weatherObject.get("ID");
             this.visibility = (Double) weatherObject.get("Mean_Visibility");
             this.windspeed = (Double) weatherObject.get("Mean_Windspeed");
