@@ -138,7 +138,7 @@ def main():
 
 
 if __name__ == '__main__':
-    scheduler = Scheduler(5, query_db)
+    scheduler = Scheduler(10, query_db)
     scheduler.start()
-    app.run(host='0.0.0.0',use_reloader=False)
+    app.run(host='0.0.0.0')
     scheduler.stop()
