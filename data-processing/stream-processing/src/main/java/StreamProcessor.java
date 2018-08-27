@@ -53,6 +53,7 @@ public class StreamProcessor {
         String flightTopic = "topic-flight";
         String weatherTopic = "topic-weather";
         String targetTopic = "topic-flying-conditions";
+        String targetWeatherTopic = "topic-latest-weather";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stream-processor");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-35-160-138-85.us-west-2.compute.amazonaws.com:9092," +
@@ -115,9 +116,9 @@ public class StreamProcessor {
 
 
 
-        flightsWithFlyingConditionsJSON.to("topic-flying-conditions");
+        flightsWithFlyingConditionsJSON.to(targetTopic);
         KStream <String, String> latestWeatherStream = weatherTable.toStream();
-        latestWeatherStream.to("topic-latest-weather");
+        latestWeatherStream.to(targetWeatherTopic);
 
 
 
