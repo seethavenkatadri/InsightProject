@@ -98,6 +98,8 @@ public class StreamProcessor {
                  new ValueJoiner<String, String, FlightsWithFlyingConditions>() {
                     @Override
                     public FlightsWithFlyingConditions apply(String leftValue, String rightValue) {
+                        System.out.println("leftvalue:" + leftValue);
+                        System.out.println("rightvalue:" + rightValue);
                         return new FlightsWithFlyingConditions(leftValue,rightValue);
                     }
                 }
