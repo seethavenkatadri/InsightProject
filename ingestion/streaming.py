@@ -113,9 +113,12 @@ if __name__ == '__main__':
             else:
                 arr[0] = arr[0].replace("-", "")
                 tempDict = dict({weather_record[i]: arr[i] for i in range(len(arr) - 1)})
-                tempDict["ID"]=stationIds[counter][0]
-                tempDict["USAF"] = stationIds[counter][1]
-                tempDict["WBAN"] = stationIds[counter][2]
+               # tempDict["ID"]=stationIds[counter][0]
+               # tempDict["USAF"] = stationIds[counter][1]
+               # tempDict["WBAN"] = stationIds[counter][2]
+                tempDict["ID"] = '89087099999'
+                tempDict["USAF"] = '890870'
+                tempDict["WBAN"] = '99999'
                 resultDict = assign_defaults(topicName,tempDict)
             resultDict["inputTime"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
