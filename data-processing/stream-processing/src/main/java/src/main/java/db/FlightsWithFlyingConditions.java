@@ -123,10 +123,12 @@ public class FlightsWithFlyingConditions {
 
     public FlightsWithFlyingConditions(String flight, String weather) {
         System.out.println("Inside constructor");
+        System.out.println("flight:" + flight);
+        System.out.println("weather:" + weather);
 
 
 
-        if (flight != null) {
+        if (flight != "") {
             JSONObject flightObject = DatabaseAccessor.convertStringToJson(flight);
             this.icao24 = (String) flightObject.get("icao24");
             this.latitude = (String) flightObject.get("latitude");
@@ -136,7 +138,7 @@ public class FlightsWithFlyingConditions {
             this.track = (String) flightObject.get("true_track");
             this.inputTime = (String) flightObject.get("inputTime");
         }
-        if (weather != null) {
+        if (weather != "") {
             JSONObject weatherObject = DatabaseAccessor.convertStringToJson(weather);
             System.out.println("Station id : " + (String) weatherObject.get("ID"));
             this.stationId = (String) weatherObject.get("ID");
