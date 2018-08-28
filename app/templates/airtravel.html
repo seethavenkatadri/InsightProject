@@ -214,7 +214,7 @@ map.on('load', function() {
     {% for row in weatherdata %}
         <tr>
         {% for key,value in row.items() %}
-            <td>{{ value }}</td>
+            <td>if ({{ value }} == null) 0.0 else {{ value }}</td>
         {% endfor %}
         </tr>
     {% endfor %}
