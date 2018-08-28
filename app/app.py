@@ -73,7 +73,7 @@ def fetch_flights():
 
 def fetch_weather():
     """ select flight records for display """
-    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, info ->> 'Precipitation' as precipitation  from weather w where date_trunc('day',w.create_date) >= date_trunc('day',current_timestamp - interval '1' day) and create_date = (select max(create_date) from weather wi where wi.station_id = w.station_id) limit 300;"
+    sql = "select station_id AS station, info ->> 'Latitude' as latitude, info ->> 'Longitude' as longitude, info ->> 'Mean_Visibility' as visibility, info ->> 'Mean_Windspeed' as windspeed, coalesce(info ->> 'Precipitation','0.0') as precipitation  from weather w where date_trunc('day',w.create_date) >= date_trunc('day',current_timestamp - interval '1' day) and create_date = (select max(create_date) from weather wi where wi.station_id = w.station_id) limit 300;"
     conn = None
     state_id = None
     try:
