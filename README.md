@@ -22,7 +22,7 @@ OpenSky Flight status dataset
 
 ## Engineering challenges
 
-- Joining two real-time streams of data and handle the frequency difference between them
+- Joining two real-time streams of data and handling the frequency difference between them
 - Finding the closest weather station for a given flight
 
 ## Trade-offs
