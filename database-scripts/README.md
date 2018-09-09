@@ -1,3 +1,6 @@
 # Database scripts
 
-Use this to create databases, scripts to create tables, user permissions. Do not put your database passwords here.
+- create-statement.sql - DDL statements for all tables
+- database.ini - Contains the schema details
+- insert-stations-data.py - inserts weather station master data 
+- kafka-postgres-connect.py - inserts data from target topics into the output postgres tables
