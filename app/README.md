@@ -1,3 +1,3 @@
-# Application for Project-Title
+# Application for SafeJourney
 
-Provide details about how your UI works.
+The front-end for this application is implemented using Flask and Mapbox
