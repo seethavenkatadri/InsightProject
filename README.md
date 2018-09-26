@@ -1,7 +1,7 @@
 # SafeJourney
 A real-time data pipeline to track where exactly a flight is affected by bad weather
 
-[Link](bit.ly/safejourney-slides) to the presentation
+[Link](https://docs.google.com/presentation/d/1VAlkg6k59S8LgNlJFo3JDvXI7fYW1ZMHP4ty9S8MjuQ/edit#slide=id.g3edceecf44_2_0) to the presentation
 
 
 
